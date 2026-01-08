@@ -56,6 +56,7 @@ export const API_ENDPOINTS = {
     ADD_CORPORATE_CLIENT: "/CorporateClientsOnboarding/AddNewCorporateClient",
     ADD_DIRECTORS: "/CorporateClientsOnboarding/AddListOFDirectors",
     UPLOAD_DOCUMENTS: "/CorporateClientsOnboarding/Corporate_Kyc_Upload/{accountNumber}",
+    ADD_SHAREHOLDERS: "/CorporateClientsOnboarding/AddListOfShareholders",
     SUBMIT: "/CorporateClientsOnboarding/Submit_CorporateClient"
   }
 };
