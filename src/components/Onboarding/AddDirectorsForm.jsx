@@ -131,14 +131,74 @@ const DirectorForm = ({
 
         const handleUpload = async (file, fieldName) => {
             try {
-                console.log("Before Uploading.........")
                 const base64String = await getBase64(file);
-                // console.log('Base64 String:', base64String);
-            
+                const fileName = file.name;
+
+                if (!base64String) {
+                    console.error("Base64 conversion failed - empty result");
+                    return false;
+                }
+
+                // Store base64 in form for validation
                 form.setFieldsValue({
                     [fieldName]: base64String
                 });
-                console.log(form.getFieldsValue())
+
+                const fieldNameWithoutId = fieldName.replace(`_${directorId}`, '');
+
+                // Map form fields to API fields and their corresponding name fields
+                // Note: Backend API has inconsistent naming (_Name vs _name, and field name differences)
+                const fieldMapping = {
+                    'Proof_Of_Address_Document': {
+                        documentField: 'Proof_Of_Address_Document',
+                        nameField: 'Proof_Of_Address_Document_Name'
+                    },
+                    'Identification_Document': {
+                        documentField: 'Identification_Document',
+                        nameField: 'Identification_Document_Name'
+                    },
+                    'Passport_Photograph': {
+                        documentField: 'Passport_Photograph',
+                        nameField: 'Passport_Photograph_Name'
+                    },
+                    'PEP_Approval_Document': {
+                        documentField: 'PEP_Approval_Document',
+                        nameField: 'PEP_Approval_Document_Name'
+                    },
+                    'International_Passport': {
+                        documentField: 'International_Passport',
+                        nameField: 'International_Passport_name' // lowercase 'n' in API
+                    },
+                    'Sanction_Screening': {
+                        documentField: 'Sanction_Screening_Document', // API expects 'Document' suffix
+                        nameField: 'Sanction_Screening_Document_Name'
+                    },
+                    'Safe_Watch': {
+                        documentField: 'Safe_Watch',
+                        nameField: 'SafeWatch_Name' // Different format in API
+                    }
+                };
+
+                const mapping = fieldMapping[fieldNameWithoutId];
+
+                if (mapping) {
+                    // Store BOTH document and filename
+                    // Note: Using forEach to call onFieldChange twice, but with functional setState
+                    // in the hook, this properly merges both updates
+                    const updateFields = {
+                        [mapping.documentField]: base64String,
+                        [mapping.nameField]: fileName
+                    };
+
+                    Object.entries(updateFields).forEach(([field, value]) => {
+                        onFieldChange(directorId, field, value);
+                    });
+
+                    message.success(`${fileName} uploaded successfully`); 
+                } else { 
+                    console.error("No mapping found for field:", fieldNameWithoutId); 
+                }
+
                 return false;
             } catch (error) {
                 console.error('Error converting file to base64:', error);
@@ -604,8 +664,8 @@ const DirectorForm = ({
                                     option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                                 }
                             >
-                                <Select.Option>Valid</Select.Option>
-                                <Select.Option>Invalid</Select.Option>
+                                <Select.Option value="Valid">Valid</Select.Option>
+                                <Select.Option value="Invalid">Invalid</Select.Option>
                             </Select>
                         </Form.Item>
                     </Col>
@@ -706,8 +766,8 @@ const DirectorForm = ({
                                     option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                                 }
                             >
-                                <Select.Option>PEP</Select.Option>
-                                <Select.Option>Non PEP</Select.Option>
+                                <Select.Option value="PEP">PEP</Select.Option>
+                                <Select.Option value="Non PEP">Non PEP</Select.Option>
                             </Select>
                         </Form.Item>
                     </Col>
@@ -726,9 +786,9 @@ const DirectorForm = ({
                                     option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                                 }
                             >
-                                <Select.Option>Approved</Select.Option>
-                                <Select.Option>Pending</Select.Option>
-                                <Select.Option>Rejected</Select.Option>
+                                <Select.Option value="Approved">Approved</Select.Option>
+                                <Select.Option value="Pending">Pending</Select.Option>
+                                <Select.Option value="Rejected">Rejected</Select.Option>
                             </Select>
                         </Form.Item>
                     </Col>
@@ -747,8 +807,8 @@ const DirectorForm = ({
                                     option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                                 }
                             >
-                                <Select.Option>Blacklisted</Select.Option>
-                                <Select.Option>Not Blacklisted</Select.Option>
+                                <Select.Option value="Blacklisted">Blacklisted</Select.Option>
+                                <Select.Option value="Not Blacklisted">Not Blacklisted</Select.Option>
                             </Select>
                         </Form.Item>
                     </Col>

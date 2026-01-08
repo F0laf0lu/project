@@ -81,6 +81,75 @@ class ClientService {
     return response.data;
   }
 
+  async addCorporateClient(clientData, userName, options={}) {
+    const {accountNumber} = options
+    const payload = {
+      ...clientData,
+      Created_By: userName,
+      Contact_Email_Address: clientData.Contact_Email_Address || '',
+      AccountNumber : accountNumber
+    };
+
+    const response = await axiosClient.post(
+      API_ENDPOINTS.CORPORATECLIENTS.ADD_CORPORATE_CLIENT,
+      payload
+    );
+    return response.data;
+  }
+
+  async submitDirectors(directors, accountNumber, userName) {
+    const payload = {
+      AccountNumber: accountNumber,
+      Trust_Officer_SapID: userName,
+      Directors: directors
+    };
+    console.log(payload)
+
+    const response = await axiosClient.post(
+      API_ENDPOINTS.CORPORATECLIENTS.ADD_DIRECTORS,
+      payload,
+    );
+
+    return response.data;
+  }
+
+  async uploadCorporateDocuments(files, kycTypes, accountNumber) {
+    const formData = new FormData();
+
+    files.forEach(
+      file=>{
+        formData.append('files', file)
+      }
+    )
+    kycTypes.forEach(
+      kycType=>{
+        formData.append('kycTypes', kycType)
+      }
+    )
+
+    const url = API_ENDPOINTS.CORPORATECLIENTS.UPLOAD_DOCUMENTS.replace('{accountNumber}', accountNumber)
+
+    const response = await axiosClient.postForm(
+      url,
+      formData,
+    );
+
+    return response.data;
+  }
+
+  async submitCorporateOnboarding(sapID, accountNumber){
+    const payload = {
+      SapId: sapID,
+      AccountNumber: accountNumber
+    }
+
+    const response = await axiosClient.post(
+      API_ENDPOINTS.CORPORATECLIENTS.SUBMIT,
+      payload
+    )
+    return response.data
+  }
+
   async submitOnboarding(sapID, accountNumber){
     const payload = {
       SapId: sapID,

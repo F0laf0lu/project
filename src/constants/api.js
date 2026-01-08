@@ -39,6 +39,7 @@ export const API_ENDPOINTS = {
 
     ADD_INDIVIDUAL: "/IndividualClientsOnboarding/Add_Individual_Clients",
     ADD_RELATIONSHIP: "/IndividualClientsOnboarding/Add_Relationship_To_IndividualClients",
+    
     UPLOAD_DOCUMENTS: "/IndividualClientsOnboarding/Kyc-Upload",
     ADD_BENEFICIARIES: "/IndividualClientsOnboarding/Add_List_Of_Beneficiaries_To_IndividualClients",
 
@@ -50,6 +51,13 @@ export const API_ENDPOINTS = {
     COMPLETED_CLIENT_LIST : "/IndividualClientsOnboarding/Get_List_Of_Completed_IndividualClients",
     COMPLETED_CLIENT_DETAILS : "/IndividualClientsOnboarding/Get_Completed_Individual_ClientDetails",
   },
+
+  CORPORATECLIENTS:{
+    ADD_CORPORATE_CLIENT: "/CorporateClientsOnboarding/AddNewCorporateClient",
+    ADD_DIRECTORS: "/CorporateClientsOnboarding/AddListOFDirectors",
+    UPLOAD_DOCUMENTS: "/CorporateClientsOnboarding/Corporate_Kyc_Upload/{accountNumber}",
+    SUBMIT: "/CorporateClientsOnboarding/Submit_CorporateClient"
+  }
 };
 
 export const HTTP_METHODS = {

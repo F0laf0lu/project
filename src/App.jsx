@@ -1,7 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
 import { NotificationProvider } from './contexts/NotificationContext';
-import DataTable from './components/Datatable'
 import ProtectedRoute from './components/ProtectedRoute';
 import LoginPage from './pages/LoginPage'
 import UserRoleManagement from './pages/RolePage';
@@ -12,7 +11,6 @@ import CorporateClient from './pages/CorporateClientsPage';
 import AppLayout from './components/layout/AppLayout';
 import ClientDetailsPage from './pages/ClientDetailsPage';
 import OnboardClientPage from './pages/OnboardClientPage';
-import ParentComponent from './pages/test';
 import "./App.css"
 
 
@@ -28,9 +26,10 @@ function App() {
           <Router>
             <Routes>
                 <Route path="/" element={
-                  <ProtectedRoute>
-                    <AppLayout />
-                  </ProtectedRoute>
+                  // <ProtectedRoute>
+                  //   <AppLayout />
+                  // </ProtectedRoute>
+                  <AppLayout />
                   }>
                   <Route index element={<Dashboard />} />
                   <Route path="/dashboard" element={<Dashboard />} />
@@ -42,12 +41,10 @@ function App() {
                   <Route path="/incomplete-onboarding" element={<IncompleteOnboardingPage />} />
                 </Route>
               <Route path='/login' element={<LoginPage/>}/>
-              <Route path='/test' element={<ParentComponent/>}/>
-              <Route path='/mock' element={<DataTable/>}/>
               <Route path="*" element={<div>Not found</div>} />
             </Routes>
           </Router>
-u        </AuthProvider>
+        </AuthProvider>
       </NotificationProvider>
     </>
   )

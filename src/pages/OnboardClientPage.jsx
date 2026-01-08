@@ -193,25 +193,88 @@ const OnboardClientPage = () => {
     }, [resumeOnboardingData, form, utilities]);
 
     // Corporate onboarding
-    const handleCorporateOnboarding = ()=>{
+    const handleCorporateOnboarding = async () => {
       let currentValues = form.getFieldsValue();
 
       if (currentStep === 2) {
-          currentValues = {
-            Directors: getAllDirectorsData()
-          }
+        currentValues = {
+          Directors: getAllDirectorsData()
         }
-
-      switch (currentStep) {
-        case 1:
-          console.log(currentValues)
-          break;
-        case 2:
-          console.log(currentValues)
-        default:
-          break;
       }
 
+      let key;
+      if (currentStep !== 4) {
+        const corporateStepMap = {
+          0: "clientType",
+          1: "clientDetails",
+          2: "directorsDetails",
+          3: "uploadedDocs"
+        }
+        key = corporateStepMap[currentStep]
+        setFormData(prev => ({
+          ...prev, [key]: {
+            ...prev[key],
+            ...currentValues
+          }
+        }))
+      }
+
+      let result;
+      const accountNumber = formData?.accountNumber || location.state?.clientData.Customer_Reg_ID
+
+      switch (currentStep) {
+        case 0:
+          console.log(key, currentValues)
+          setFormData(prev => ({ ...prev, ...currentValues }))
+          setFormSteps(corporateSteps)
+          message.success("Client type selected")
+          break;
+        case 1:
+          console.log(key, currentValues)
+          result = await clientService.addCorporateClient(currentValues, authUser.UserName, { accountNumber })
+          console.log(result)
+          if (result && result.Success) {
+            showNotification("success", {
+              message: result.Message
+            })
+            setFormData(prev => ({ ...prev, accountNumber: result.Data?.Generated_AccountNumber }));
+          } else {
+            message.error("Failed to save corporate client details")
+            return;
+          }
+          break
+        case 2:
+          console.log(key, currentValues)
+          result = await clientService.submitDirectors(currentValues.Directors, accountNumber, authUser.UserName);
+          if (result && result.Success) {
+            showNotification("success", {
+              message: result.Message
+            })
+          } else {
+            message.error('Failed to save directors details');
+            return;
+          }
+          break
+        case 3:
+          if (isResuming && files.length == 0) {
+            break
+          }
+          result = await clientService.uploadCorporateDocuments(files, kycTypes, accountNumber);
+          if (result && result.Success) {
+            showNotification("success", {
+              message: result.Message
+            })
+          } else {
+            showNotification("error", {
+              message: "Failed to upload documents"
+            })
+            return;
+          }
+          break
+        default:
+          console.log(key, currentValues)
+          break;
+      }
       setCurrentStep(prev => prev + 1);
     }
   
@@ -328,13 +391,18 @@ const OnboardClientPage = () => {
     const handleOnboardClient = async() => {
       setTableLoading(true);
         const accountNumber = formData.accountNumber || location.state.clientData.AccountNumber
-        const result = await clientService.submitOnboarding(authUser.UserName, accountNumber);
+        const isCorporate = formData.clientType === 'Corporate';
+
+        const result = isCorporate
+          ? await clientService.submitCorporateOnboarding(authUser.UserName, accountNumber)
+          : await clientService.submitOnboarding(authUser.UserName, accountNumber);
+
         if (result && result.Success) {
           showNotification("success", {
                 message: result.Message
           })
         } else {
-          showNotification("success", {
+          showNotification("error", {
               message:'Failed to submit client details'
           })
           setTableLoading(false);

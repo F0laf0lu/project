@@ -25,18 +25,17 @@ export const useDirectors = ()=>{
 
 
     const updateDirectorField = (directorId, fieldName, value) => {
-        const updatedData = {
-            ...directorData,
+        // Use functional form to avoid stale state when multiple updates happen quickly
+        setDirectorData(prevData => ({
+            ...prevData,
             [directorId]: {
-                ...directorData[directorId],
+                ...prevData[directorId],
                 [fieldName]: value
             }
-        };
-        setDirectorData(updatedData);
+        }));
     };
 
     const getAllDirectorsData = () => {
-      console.log(directorData)
         return directors.map(b => directorData[b.id] || {});
     };
 
