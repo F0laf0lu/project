@@ -112,7 +112,7 @@ const UploadDocForm = ({form, onAddFile, onRemoveFile, files, kycTypes, isResumi
     };
 
     const handleRemove = (index) => {
-        onRemoveFile(index)
+        onRemoveFile(index, isResuming)
         message.success('File removed successfully');
     };
 

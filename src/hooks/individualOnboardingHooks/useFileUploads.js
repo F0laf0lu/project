@@ -20,13 +20,13 @@ export const useFileUpload = ()=>{
       setKycTypes((prev)=>[...prev, kycType])
     }
 
-    const removeFile = (index)=>{
+    const removeFile = (index, isResuming)=>{
+      if (isResuming) {
+          setResumeFiles(prevFiles => prevFiles.filter((_, i) => i !== index))
+          setResumeKycTypes(prevTypes => prevTypes.filter((_, i) => i !== index))
+      }
       setFiles(prevFiles => prevFiles.filter((_, i) => i !== index));
       setKycTypes(prevTypes => prevTypes.filter((_, i) => i !== index));
-      if (isResuming) {
-        setResumeFiles(prevFiles => prevFiles.filter((_, i) => i !== index))
-        setResumeKycTypes(prevTypes => prevTypes.filter((_, i) => i !== index))
-      }
     }
 
     const resetFiles = () => {
