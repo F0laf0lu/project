@@ -1,10 +1,12 @@
-import { Space, Tag, Select, List, Row, Col } from 'antd';
+import { Space, Tag, Select, List, Row, Col, Card, Collapse } from 'antd';
+
+const { Panel } = Collapse;
 
 import { UserOutlined, TeamOutlined,FileTextOutlined,IdcardOutlined,CheckCircleOutlined,CloseCircleOutlined } from '@ant-design/icons';
 import { getValueFromName, getNameFromValue } from '../../utils/utils';
 
 
-const ReviewOnboarding = ({form, beneficiaries, files, kycTypes, utilities}) => {
+const ReviewOnboarding = ({form, beneficiaries, files, kycTypes, utilities, directors, directorData, shareholders, shareholderData}) => {
       const clientType = form.getFieldValue('clientType');
       const companyType = form.getFieldValue('companyType');
 
@@ -100,6 +102,19 @@ const ReviewOnboarding = ({form, beneficiaries, files, kycTypes, utilities}) => 
               {label}
             </span>
           </div>
+        );
+      };
+
+      // Helper to render document status for directors/shareholders
+      const renderDocumentStatus = (data, fieldName, label) => {
+        const hasDoc = data[fieldName] && data[fieldName].length > 0;
+        return (
+          <Tag
+            icon={hasDoc ? <CheckCircleOutlined /> : <CloseCircleOutlined />}
+            color={hasDoc ? 'success' : 'default'}
+          >
+            {label}
+          </Tag>
         );
       };
 
@@ -322,6 +337,400 @@ const ReviewOnboarding = ({form, beneficiaries, files, kycTypes, utilities}) => 
               </>
             )}
           </div>
+
+          {/* Directors Section - Corporate Only */}
+          {clientType === 'Corporate' && directors && directors.length > 0 && (
+            <div style={{
+              marginBottom: '32px',
+              background: 'white',
+              padding: '24px',
+              borderRadius: '8px',
+              border: '2px solid #e8e8e8'
+            }}>
+              <h4 style={{
+                color: '#1890ff',
+                fontSize: '16px',
+                fontWeight: '600',
+                marginBottom: '16px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px'
+              }}>
+                <TeamOutlined /> Directors ({directors.length} {directors.length === 1 ? 'director' : 'directors'} added)
+              </h4>
+
+              <Collapse
+                accordion={false}
+                expandIconPosition="end"
+                style={{ backgroundColor: 'transparent' }}
+              >
+                {directors.map((director, index) => {
+                  const data = directorData[director.id] || {};
+                  const displayName = [data.Title, data.FirstName, data.OtherName, data.LastName].filter(Boolean).join(' ') || `Director ${index + 1}`;
+
+                  return (
+                    <Panel
+                      header={
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                          <span style={{ fontSize: '15px', fontWeight: '500' }}>
+                            {displayName}
+                          </span>
+                          {data.Email && (
+                            <Tag color="blue">{data.Email}</Tag>
+                          )}
+                        </div>
+                      }
+                      key={director.id.toString()}
+                      style={{ marginBottom: '16px' }}
+                    >
+                    <Row gutter={[16, 16]}>
+                      {/* Personal Information */}
+                      <Col xs={24}>
+                        <div style={{
+                          fontSize: '14px',
+                          fontWeight: '600',
+                          color: '#595959',
+                          borderBottom: '1px solid #e8e8e8',
+                          paddingBottom: '8px',
+                          marginBottom: '12px'
+                        }}>
+                          {displayName}
+                        </div>
+                      </Col>
+
+                      <Col xs={24} md={8}>
+                        <div style={{ color: '#8c8c8c', fontSize: '12px' }}>Date of Birth</div>
+                        <div style={{ fontSize: '14px', fontWeight: '500' }}>
+                          {data.Date_Of_Birth || <span style={{ color: '#bfbfbf' }}>Not provided</span>}
+                        </div>
+                      </Col>
+                      <Col xs={24} md={8}>
+                        <div style={{ color: '#8c8c8c', fontSize: '12px' }}>Nationality</div>
+                        <div style={{ fontSize: '14px', fontWeight: '500' }}>
+                          {data.Nationality || <span style={{ color: '#bfbfbf' }}>Not provided</span>}
+                        </div>
+                      </Col>
+                      <Col xs={24} md={8}>
+                        <div style={{ color: '#8c8c8c', fontSize: '12px' }}>State of Origin</div>
+                        <div style={{ fontSize: '14px', fontWeight: '500' }}>
+                          {data.State_Of_Origin || <span style={{ color: '#bfbfbf' }}>Not provided</span>}
+                        </div>
+                      </Col>
+
+                      {/* Location Information */}
+                      <Col xs={24}>
+                        <div style={{
+                          fontSize: '14px',
+                          fontWeight: '600',
+                          color: '#595959',
+                          borderBottom: '1px solid #e8e8e8',
+                          paddingBottom: '8px',
+                          marginBottom: '12px',
+                          marginTop: '12px'
+                        }}>
+                          Location Information
+                        </div>
+                      </Col>
+
+                      <Col xs={24} md={8}>
+                        <div style={{ color: '#8c8c8c', fontSize: '12px' }}>Country</div>
+                        <div style={{ fontSize: '14px', fontWeight: '500' }}>
+                          {data.Country || <span style={{ color: '#bfbfbf' }}>Not provided</span>}
+                        </div>
+                      </Col>
+                      <Col xs={24} md={8}>
+                        <div style={{ color: '#8c8c8c', fontSize: '12px' }}>State of Residency</div>
+                        <div style={{ fontSize: '14px', fontWeight: '500' }}>
+                          {data.State_Of_Residency || <span style={{ color: '#bfbfbf' }}>Not provided</span>}
+                        </div>
+                      </Col>
+                      <Col xs={24} md={8}>
+                        <div style={{ color: '#8c8c8c', fontSize: '12px' }}>City</div>
+                        <div style={{ fontSize: '14px', fontWeight: '500' }}>
+                          {data.City || <span style={{ color: '#bfbfbf' }}>Not provided</span>}
+                        </div>
+                      </Col>
+
+                      {/* Contact Information */}
+                      <Col xs={24}>
+                        <div style={{
+                          fontSize: '14px',
+                          fontWeight: '600',
+                          color: '#595959',
+                          borderBottom: '1px solid #e8e8e8',
+                          paddingBottom: '8px',
+                          marginBottom: '12px',
+                          marginTop: '12px'
+                        }}>
+                          Contact Information
+                        </div>
+                      </Col>
+
+                      <Col xs={24} md={12}>
+                        <div style={{ color: '#8c8c8c', fontSize: '12px' }}>Mobile Number</div>
+                        <div style={{ fontSize: '14px', fontWeight: '500' }}>
+                          {data.Mobile_Number1_Country_Code && data.Mobile_Number1
+                            ? `${data.Mobile_Number1_Country_Code} ${data.Mobile_Number1}`
+                            : <span style={{ color: '#bfbfbf' }}>Not provided</span>}
+                        </div>
+                      </Col>
+                      <Col xs={24} md={12}>
+                        <div style={{ color: '#8c8c8c', fontSize: '12px' }}>Email</div>
+                        <div style={{ fontSize: '14px', fontWeight: '500' }}>
+                          {data.Email || <span style={{ color: '#bfbfbf' }}>Not provided</span>}
+                        </div>
+                      </Col>
+
+                      {/* Professional Information */}
+                      <Col xs={24}>
+                        <div style={{
+                          fontSize: '14px',
+                          fontWeight: '600',
+                          color: '#595959',
+                          borderBottom: '1px solid #e8e8e8',
+                          paddingBottom: '8px',
+                          marginBottom: '12px',
+                          marginTop: '12px'
+                        }}>
+                          Professional Information
+                        </div>
+                      </Col>
+
+                      <Col xs={24} md={8}>
+                        <div style={{ color: '#8c8c8c', fontSize: '12px' }}>Occupation</div>
+                        <div style={{ fontSize: '14px', fontWeight: '500' }}>
+                          {data.Occupation || <span style={{ color: '#bfbfbf' }}>Not provided</span>}
+                        </div>
+                      </Col>
+                      <Col xs={24} md={8}>
+                        <div style={{ color: '#8c8c8c', fontSize: '12px' }}>Source of Wealth</div>
+                        <div style={{ fontSize: '14px', fontWeight: '500' }}>
+                          {data.Source_Of_Wealth || <span style={{ color: '#bfbfbf' }}>Not provided</span>}
+                        </div>
+                      </Col>
+                      <Col xs={24} md={8}>
+                        <div style={{ color: '#8c8c8c', fontSize: '12px' }}>BVN</div>
+                        <div style={{ fontSize: '14px', fontWeight: '500' }}>
+                          {data.BVN || <span style={{ color: '#bfbfbf' }}>Not provided</span>}
+                        </div>
+                      </Col>
+
+                      {/* Identification */}
+                      <Col xs={24}>
+                        <div style={{
+                          fontSize: '14px',
+                          fontWeight: '600',
+                          color: '#595959',
+                          borderBottom: '1px solid #e8e8e8',
+                          paddingBottom: '8px',
+                          marginBottom: '12px',
+                          marginTop: '12px'
+                        }}>
+                          Identification
+                        </div>
+                      </Col>
+
+                      <Col xs={24} md={8}>
+                        <div style={{ color: '#8c8c8c', fontSize: '12px' }}>ID Type</div>
+                        <div style={{ fontSize: '14px', fontWeight: '500' }}>
+                          {data.ID_Type || <span style={{ color: '#bfbfbf' }}>Not provided</span>}
+                        </div>
+                      </Col>
+                      <Col xs={24} md={8}>
+                        <div style={{ color: '#8c8c8c', fontSize: '12px' }}>ID Number</div>
+                        <div style={{ fontSize: '14px', fontWeight: '500' }}>
+                          {data.ID_Number || <span style={{ color: '#bfbfbf' }}>Not provided</span>}
+                        </div>
+                      </Col>
+                      <Col xs={24} md={8}>
+                        <div style={{ color: '#8c8c8c', fontSize: '12px' }}>ID Validity</div>
+                        <div style={{ fontSize: '14px', fontWeight: '500' }}>
+                          {data.Identification_Validity ? (
+                            <Tag color={data.Identification_Validity === 'Valid' ? 'success' : 'error'}>
+                              {data.Identification_Validity}
+                            </Tag>
+                          ) : <span style={{ color: '#bfbfbf' }}>Not provided</span>}
+                        </div>
+                      </Col>
+
+                      {/* Compliance */}
+                      <Col xs={24}>
+                        <div style={{
+                          fontSize: '14px',
+                          fontWeight: '600',
+                          color: '#595959',
+                          borderBottom: '1px solid #e8e8e8',
+                          paddingBottom: '8px',
+                          marginBottom: '12px',
+                          marginTop: '12px'
+                        }}>
+                          Compliance
+                        </div>
+                      </Col>
+
+                      <Col xs={24} md={12}>
+                        <div style={{ color: '#8c8c8c', fontSize: '12px' }}>PEP Status</div>
+                        <div style={{ fontSize: '14px', fontWeight: '500' }}>
+                          {data.PEP_Status ? (
+                            <Tag color={data.PEP_Status === 'PEP' ? 'warning' : 'success'}>
+                              {data.PEP_Status}
+                            </Tag>
+                          ) : <span style={{ color: '#bfbfbf' }}>Not provided</span>}
+                        </div>
+                      </Col>
+                      <Col xs={24} md={12}>
+                        <div style={{ color: '#8c8c8c', fontSize: '12px' }}>Sanction Screening Status</div>
+                        <div style={{ fontSize: '14px', fontWeight: '500' }}>
+                          {data.Sanction_Screening_Status ? (
+                            <Tag color={data.Sanction_Screening_Status === 'Blacklisted' ? 'error' : 'success'}>
+                              {data.Sanction_Screening_Status}
+                            </Tag>
+                          ) : <span style={{ color: '#bfbfbf' }}>Not provided</span>}
+                        </div>
+                      </Col>
+
+                      {/* Documents Status */}
+                      <Col xs={24}>
+                        <div style={{
+                          fontSize: '14px',
+                          fontWeight: '600',
+                          color: '#595959',
+                          borderBottom: '1px solid #e8e8e8',
+                          paddingBottom: '8px',
+                          marginBottom: '12px',
+                          marginTop: '12px'
+                        }}>
+                          Documents
+                        </div>
+                      </Col>
+
+                      <Col xs={24}>
+                        <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                          {renderDocumentStatus(data, 'Proof_Of_Address_Document', 'Proof of Address')}
+                          {renderDocumentStatus(data, 'Identification_Document', 'ID Document')}
+                          {renderDocumentStatus(data, 'Passport_Photograph', 'Passport Photo')}
+                          {renderDocumentStatus(data, 'PEP_Approval_Document', 'PEP Approval')}
+                          {renderDocumentStatus(data, 'International_Passport', 'International Passport')}
+                          {renderDocumentStatus(data, 'Sanction_Screening_Document', 'Sanction Screening')}
+                          {renderDocumentStatus(data, 'Safe_Watch', 'Safe Watch')}
+                        </div>
+                      </Col>
+                    </Row>
+                    </Panel>
+                  );
+                })}
+              </Collapse>
+            </div>
+          )}
+
+          {/* Shareholders Section - Corporate Only */}
+          {clientType === 'Corporate' && shareholders && shareholders.length > 0 && (
+            <div style={{
+              marginBottom: '32px',
+              background: 'white',
+              padding: '24px',
+              borderRadius: '8px',
+              border: '2px solid #e8e8e8'
+            }}>
+              <h4 style={{
+                color: '#1890ff',
+                fontSize: '16px',
+                fontWeight: '600',
+                marginBottom: '16px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px'
+              }}>
+                <TeamOutlined /> Shareholders ({shareholders.length} {shareholders.length === 1 ? 'shareholder' : 'shareholders'} added)
+              </h4>
+
+              <Collapse
+                accordion={false}
+                expandIconPosition="end"
+                style={{ backgroundColor: 'transparent' }}
+              >
+                {shareholders.map((shareholder, index) => {
+                  const data = shareholderData[shareholder.id] || {};
+                  const displayName = [data.Title, data.FirstName, data.OtherName, data.LastName].filter(Boolean).join(' ') || `Shareholder ${index + 1}`;
+
+                  return (
+                    <Panel
+                      header={
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                          <span style={{ fontSize: '15px', fontWeight: '500' }}>
+                            {displayName}
+                          </span>
+                          {data.Shareholder_Type && (
+                            <Tag color={data.Shareholder_Type === 'Individual' ? 'blue' : 'purple'}>
+                              {data.Shareholder_Type}
+                            </Tag>
+                          )}
+                        </div>
+                      }
+                      key={shareholder.id.toString()}
+                      style={{ marginBottom: '16px' }}
+                    >
+                    <Row gutter={[16, 16]}>
+                      {/* Shareholder Information */}
+                      <Col xs={24}>
+                        <div style={{
+                          fontSize: '14px',
+                          fontWeight: '600',
+                          color: '#595959',
+                          borderBottom: '1px solid #e8e8e8',
+                          paddingBottom: '8px',
+                          marginBottom: '12px'
+                        }}>
+                          {displayName}
+                        </div>
+                      </Col>
+
+                      <Col xs={24} md={12}>
+                        <div style={{ color: '#8c8c8c', fontSize: '12px' }}>Shareholder Type</div>
+                        <div style={{ fontSize: '14px', fontWeight: '500' }}>
+                          {data.Shareholder_Type ? (
+                            <Tag color={data.Shareholder_Type === 'Individual' ? 'blue' : 'purple'}>
+                              {data.Shareholder_Type}
+                            </Tag>
+                          ) : <span style={{ color: '#bfbfbf' }}>Not provided</span>}
+                        </div>
+                      </Col>
+
+                      <Col xs={24} md={12}>
+                        <div style={{ color: '#8c8c8c', fontSize: '12px' }}>ID Card Type</div>
+                        <div style={{ fontSize: '14px', fontWeight: '500' }}>
+                          {data.ID_Card_Type || <span style={{ color: '#bfbfbf' }}>Not provided</span>}
+                        </div>
+                      </Col>
+
+                      {/* Documents Status */}
+                      <Col xs={24}>
+                        <div style={{
+                          fontSize: '14px',
+                          fontWeight: '600',
+                          color: '#595959',
+                          borderBottom: '1px solid #e8e8e8',
+                          paddingBottom: '8px',
+                          marginBottom: '12px',
+                          marginTop: '12px'
+                        }}>
+                          Documents
+                        </div>
+                      </Col>
+
+                      <Col xs={24}>
+                        <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                          {renderDocumentStatus(data, 'Inorporate_Shareholder', 'Incorporate Shareholder')}
+                          {renderDocumentStatus(data, 'Shareholder_Proof_ID', 'Proof ID')}
+                        </div>
+                      </Col>
+                    </Row>
+                    </Panel>
+                  );
+                })}
+              </Collapse>
+            </div>
+          )}
 
           {/* Step 4: Documents */}
           <div style={{ 

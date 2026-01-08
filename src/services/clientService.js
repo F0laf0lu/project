@@ -113,6 +113,22 @@ class ClientService {
     return response.data;
   }
 
+  async submitShareholders(shareholders, accountNumber, userName) {
+    const payload = {
+      AccountNumber: accountNumber,
+      Trust_Officer_SapID: userName,
+      Shareholders: shareholders
+    };
+    console.log(payload);
+
+    const response = await axiosClient.post(
+      API_ENDPOINTS.CORPORATECLIENTS.ADD_SHAREHOLDERS,
+      payload,
+    );
+
+    return response.data;
+  }
+
   async uploadCorporateDocuments(files, kycTypes, accountNumber) {
     const formData = new FormData();
 

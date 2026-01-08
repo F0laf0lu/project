@@ -7,8 +7,9 @@ import ClientDetails from '../components/Onboarding/ClientDetailsForm';
 import ReviewOnboarding from '../components/Onboarding/ReviewOnboarding';
 import NOkForm from '../components/Onboarding/NOKForm';
 import BeneficiaryForm from '../components/Onboarding/BeneficiaryForm';
-import UploadDocForm from '../components/Onboarding/IndividualDocUpload';
+import UploadDocForm from '../components/Onboarding/DocUploadForm';
 import DirectorForm from '../components/Onboarding/AddDirectorsForm';
+import ShareholderForm from '../components/Onboarding/AddShareholdersForm';
 import { useAuth } from '../contexts/AuthContext';
 import { getValueFromName, formatDateForInput } from '../utils/utils';
 import utilitiesService from '../services/utilitiesService';
@@ -16,6 +17,7 @@ import clientService from '../services/clientService';
 import { useNotification } from '../contexts/NotificationContext';
 import { useBeneficiaries } from '../hooks/individualOnboardingHooks/useBeneficiaries';
 import { useDirectors } from '../hooks/corporateOnboardingHooks/useDirectors';
+import { useShareholders } from '../hooks/corporateOnboardingHooks/useShareholders';
 import { useFileUpload } from '../hooks/individualOnboardingHooks/useFileUploads';
 
 
@@ -45,7 +47,16 @@ const OnboardClientPage = () => {
         setDirectors,
         setDirectorData } = useDirectors()
 
-  
+  const {shareholders,
+        shareholderData,
+        activeShareholderKeys,
+        addShareholder,
+        removeShareholder,
+        updateShareholderField,
+        getAllShareholdersData,
+        setActiveShareholderKeys,
+        setShareholders,
+        setShareholderData } = useShareholders()
 
   const {files, kycTypes, addFile, removeFile,resumeFiles, resumeKycTypes,
      setFiles, setKycTypes, setResumeFiles, setResumeKycTypes} = useFileUpload();
@@ -115,13 +126,17 @@ const OnboardClientPage = () => {
         icon: <TeamOutlined />,
       },
       {
+        title: 'Add Shareholders',
+        icon: <TeamOutlined />,
+      },
+      {
         title: 'Upload Documents',
         icon: <FileTextOutlined />,
       },
-      { 
+      {
         title: 'Review & Submit',
         icon: <CheckOutlined />,
-      },    
+      },
    ]
   
     // Data submission functions
@@ -202,13 +217,25 @@ const OnboardClientPage = () => {
         }
       }
 
+      if (currentStep === 3) {
+        currentValues = {
+          Shareholders: getAllShareholdersData()
+        }
+      }
+      if (currentStep === 4) {
+          currentValues = {
+            files, kycTypes
+        }
+      }
+
       let key;
-      if (currentStep !== 4) {
+      if (currentStep !== 5) {
         const corporateStepMap = {
           0: "clientType",
           1: "clientDetails",
           2: "directorsDetails",
-          3: "uploadedDocs"
+          3: "shareholdersDetails",
+          4: "uploadedDocs"
         }
         key = corporateStepMap[currentStep]
         setFormData(prev => ({
@@ -231,45 +258,57 @@ const OnboardClientPage = () => {
           break;
         case 1:
           console.log(key, currentValues)
-          result = await clientService.addCorporateClient(currentValues, authUser.UserName, { accountNumber })
-          console.log(result)
-          if (result && result.Success) {
-            showNotification("success", {
-              message: result.Message
-            })
-            setFormData(prev => ({ ...prev, accountNumber: result.Data?.Generated_AccountNumber }));
-          } else {
-            message.error("Failed to save corporate client details")
-            return;
-          }
+          // result = await clientService.addCorporateClient(currentValues, authUser.UserName, { accountNumber })
+          // console.log(result)
+          // if (result && result.Success) {
+          //   showNotification("success", {
+          //     message: result.Message
+          //   })
+          //   setFormData(prev => ({ ...prev, accountNumber: result.Data?.Generated_AccountNumber }));
+          // } else {
+          //   message.error("Failed to save corporate client details")
+          //   return;
+          // }
           break
         case 2:
           console.log(key, currentValues)
-          result = await clientService.submitDirectors(currentValues.Directors, accountNumber, authUser.UserName);
-          if (result && result.Success) {
-            showNotification("success", {
-              message: result.Message
-            })
-          } else {
-            message.error('Failed to save directors details');
-            return;
-          }
+          // result = await clientService.submitDirectors(currentValues.Directors, accountNumber, authUser.UserName);
+          // if (result && result.Success) {
+          //   showNotification("success", {
+          //     message: result.Message
+          //   })
+          // } else {
+          //   message.error('Failed to save directors details');
+          //   return;
+          // }
           break
         case 3:
-          if (isResuming && files.length == 0) {
-            break
-          }
-          result = await clientService.uploadCorporateDocuments(files, kycTypes, accountNumber);
-          if (result && result.Success) {
-            showNotification("success", {
-              message: result.Message
-            })
-          } else {
-            showNotification("error", {
-              message: "Failed to upload documents"
-            })
-            return;
-          }
+          console.log(key, currentValues)
+          // result = await clientService.submitShareholders(currentValues.Shareholders, accountNumber, authUser.UserName);
+          // if (result && result.Success) {
+          //   showNotification("success", {
+          //     message: result.Message
+          //   })
+          // } else {
+          //   message.error('Failed to save shareholders details');
+          //   return;
+          // }
+          break
+        case 4:
+          // if (isResuming && files.length == 0) {
+          //   break
+          // }
+          // result = await clientService.uploadCorporateDocuments(files, kycTypes, accountNumber);
+          // if (result && result.Success) {
+          //   showNotification("success", {
+          //     message: result.Message
+          //   })
+          // } else {
+          //   showNotification("error", {
+          //     message: "Failed to upload documents"
+          //   })
+          //   return;
+          // }
           break
         default:
           console.log(key, currentValues)
@@ -509,7 +548,7 @@ const OnboardClientPage = () => {
                   formData?.clientType === "Corporate" ? (
                   <>
                     {currentStep === 1 && <ClientDetails form={form} utilities={utilities} />}
-                    {currentStep === 2 && <DirectorForm 
+                    {currentStep === 2 && <DirectorForm
                             form={form}
                             utilities={utilities}
                             directors={directors}
@@ -520,21 +559,36 @@ const OnboardClientPage = () => {
                             activeKeys={activeDirectorKeys}
                             onActiveKeysChange={setActiveDirectorKeys}
                     />}
-                    {currentStep === 3 && <UploadDocForm 
-                            form={form} 
-                            onAddFile={addFile} 
+                    {currentStep === 3 && <ShareholderForm
+                            form={form}
+                            utilities={utilities}
+                            shareholders={shareholders}
+                            shareholderData={shareholderData}
+                            onAddShareholder={addShareholder}
+                            onRemoveShareholder={removeShareholder}
+                            onFieldChange={updateShareholderField}
+                            activeKeys={activeShareholderKeys}
+                            onActiveKeysChange={setActiveShareholderKeys}
+                    />}
+                    {currentStep === 4 && <UploadDocForm
+                            form={form}
+                            onAddFile={addFile}
                             onRemoveFile={removeFile}
-                            files={files} 
-                            kycTypes={kycTypes} 
+                            files={files}
+                            kycTypes={kycTypes}
                             isResuming={isResuming}
                             resumeKycTypes={resumeKycTypes}
                             resumeFiles={resumeFiles}
                     />}
-                    {currentStep === 4 && <ReviewOnboarding 
+                    {currentStep === 5 && <ReviewOnboarding
                             form={form} beneficiaries={beneficiaries}
-                            files={files} 
+                            files={files}
                             kycTypes={kycTypes}
-                            utilities={utilities} 
+                            utilities={utilities}
+                            directors={directors}
+                            directorData={directorData}
+                            shareholders={shareholders}
+                            shareholderData={shareholderData}
                     />}
                   </>
                   ) : (
