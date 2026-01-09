@@ -397,7 +397,6 @@ function IncompleteOnboarding() {
         })
     }
 
-
     // Filter data based on all criteria
     const filterData = (search, type, status) => {
         // setTableLoading(true);
@@ -552,6 +551,40 @@ function IncompleteOnboarding() {
             render: (record) => {
                 return <Text strong>{record}</Text>
             }
+        },
+                {
+            title: 'Actions',
+            key: 'actions',
+            width: '8%',
+            render: (_, record) => (
+                <Space size="small">
+                    {/* <Button
+                        type="link"
+                        icon={<EyeOutlined />}
+                        onClick={() => handleViewClient(record)}
+                        style={{ padding: '4px 8px' }}
+                    >
+                        View
+                    </Button> */}
+                    <Button
+                        type="link"
+                        icon={<EditOutlined />}
+                        onClick={() => handleEditClient(record.AccountNumber)}
+                        style={{ padding: '4px 8px', color: '#1890ff' }}
+                    >
+                        {/* Edit */}
+                    </Button>
+                    <Button
+                        type="link"
+                        icon={<DeleteOutlined />}
+                        // onClick={() => handleDeleteClient(record)}
+                        style={{ padding: '4px 8px', color: '#ff4d4f' }}
+                        danger
+                    >
+                        {/* Delete */}
+                    </Button>
+                </Space>
+        ),
         },
     ]
 
