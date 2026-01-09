@@ -74,6 +74,7 @@ const UserRoleManagement = () => {
           method:'POST',
           headers:{
             "Content-Type": "application/json",
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
           },
           body:JSON.stringify({
             User:authUser.UserName
@@ -87,6 +88,7 @@ const UserRoleManagement = () => {
         setIsLoading(false)
         return {...result}
       } catch (error) {
+        console.log(error)
         console.log('error')
         setIsLoading(false)
       }
@@ -101,9 +103,10 @@ const UserRoleManagement = () => {
             method:'POST',
             headers: {
               "Content-Type": "application/json",
+              'Authorization': `Bearer ${localStorage.getItem('token')}`
             },
             body: JSON.stringify({
-              "SapID": selectedUser.Username
+              "SapID": selectedUser.Username,
             })
           })
           if (!response.ok) {

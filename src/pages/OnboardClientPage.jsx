@@ -258,41 +258,42 @@ const OnboardClientPage = () => {
           break;
         case 1:
           console.log(key, currentValues)
-          // result = await clientService.addCorporateClient(currentValues, authUser.UserName, { accountNumber })
-          // console.log(result)
-          // if (result && result.Success) {
-          //   showNotification("success", {
-          //     message: result.Message
-          //   })
-          //   setFormData(prev => ({ ...prev, accountNumber: result.Data?.Generated_AccountNumber }));
-          // } else {
-          //   message.error("Failed to save corporate client details")
-          //   return;
-          // }
+
+          result = await clientService.addCorporateClient(currentValues, authUser.UserName, { accountNumber })
+          console.log(result)
+          if (result && result.Success) {
+            showNotification("success", {
+              message: result.Message
+            })
+            setFormData(prev => ({ ...prev, accountNumber: result.Data?.Generated_AccountNumber }));
+          } else {
+            message.error("Failed to save corporate client details")
+            return;
+          }
           break
         case 2:
           console.log(key, currentValues)
-          // result = await clientService.submitDirectors(currentValues.Directors, accountNumber, authUser.UserName);
-          // if (result && result.Success) {
-          //   showNotification("success", {
-          //     message: result.Message
-          //   })
-          // } else {
-          //   message.error('Failed to save directors details');
-          //   return;
-          // }
+          result = await clientService.submitDirectors(currentValues.Directors, accountNumber, authUser.UserName);
+          if (result && result.Success) {
+            showNotification("success", {
+              message: result.Message
+            })
+          } else {
+            message.error('Failed to save directors details');
+            return;
+          }
           break
         case 3:
           console.log(key, currentValues)
-          // result = await clientService.submitShareholders(currentValues.Shareholders, accountNumber, authUser.UserName);
-          // if (result && result.Success) {
-          //   showNotification("success", {
-          //     message: result.Message
-          //   })
-          // } else {
-          //   message.error('Failed to save shareholders details');
-          //   return;
-          // }
+          result = await clientService.submitShareholders(currentValues.Shareholders, accountNumber, authUser.UserName);
+          if (result && result.Success) {
+            showNotification("success", {
+              message: result.Message
+            })
+          } else {
+            message.error('Failed to save shareholders details');
+            return;
+          }
           break
         case 4:
           // if (isResuming && files.length == 0) {

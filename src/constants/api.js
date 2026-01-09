@@ -57,7 +57,13 @@ export const API_ENDPOINTS = {
     ADD_DIRECTORS: "/CorporateClientsOnboarding/AddListOFDirectors",
     UPLOAD_DOCUMENTS: "/CorporateClientsOnboarding/Corporate_Kyc_Upload/{accountNumber}",
     ADD_SHAREHOLDERS: "/CorporateClientsOnboarding/AddListOfShareholders",
-    SUBMIT: "/CorporateClientsOnboarding/Submit_CorporateClient"
+    SUBMIT: "/CorporateClientsOnboarding/Submit_CorporateClient",
+
+    ONGOING_CORPORATE_LIST: "/CorporateClientsOnboarding/GetList_Of_Ongoing_CorporateClient",
+    ONGOING_CLIENT_DETAILS: "/CorporateClientsOnboarding/Get_Ongoing_CorporateClient_Details",
+
+    COMPLETED_CLIENT_LIST : "/CorporateClientsOnboarding/Get_List_Of_Completed_CorporateClients",
+    COMPLETED_CLIENT_DETAILS : "/CorporateClientsOnboarding/Get_Completed_CorporateClient_Details",
   }
 };
 

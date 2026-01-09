@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Table, Input, Button, Space, Select, Layout, Spin, App, Typography  } from 'antd';
+import { Table, Input, Button, Space, Select, Layout, Spin, App, Typography, Tabs  } from 'antd';
 import { 
   SearchOutlined, 
   FilterOutlined, 
@@ -140,6 +140,7 @@ function IncompleteOnboarding() {
     const navigate = useNavigate();
 
     const [data, setData] = useState([]);
+    const [corporateClientData, setCorporateClientsData] = useState([])
     const [tableLoading, setTableLoading] = useState(false);
     const [searchText, setSearchText] = useState('');
     const [clientTypeFilter, setClientTypeFilter] = useState('all');
@@ -173,6 +174,30 @@ function IncompleteOnboarding() {
         }
     }
 
+    const fetchCorporateClients = async()=>{
+        try {
+            const response = await fetch(`${BASE_URL}/CorporateClientsOnboarding/GetList_Of_Ongoing_CoporateClients`, {
+                headers:{
+                    "Authorization": `Bearer ${token}`
+                }
+            })
+            if (response.status=== 401) {
+                console.log('Token expired or unauthorized');
+                logout()
+                navigate('/login')
+            }
+            else if (!response.ok) {
+                throw new Error(`Response status: ${response.status}`)
+            }
+            const data = await response.json()
+            const clientData = data.Data
+            setCorporateClientsData(clientData.filter((client)=>client.AccountNumber != ""))
+        } catch (error) {
+            console.log(error)
+            console.log("An error occured")
+        }
+    }
+
     async function fetchUtilities() {    
         setLoading(true);
         try {
@@ -196,6 +221,7 @@ function IncompleteOnboarding() {
         setLoading(true);
         setTableLoading(true)
         fetchClients()
+        fetchCorporateClients()
         setLoading(false);
         setTableLoading(false)
     }, []);
@@ -375,6 +401,8 @@ function IncompleteOnboarding() {
     // Filter data based on all criteria
     const filterData = (search, type, status) => {
         // setTableLoading(true);
+
+        // TODO: Get the current active tab to get the table. Then do the filtering
         
         setTimeout(() => {
         let filtered = [...data];
@@ -462,7 +490,139 @@ function IncompleteOnboarding() {
                 </Space>
         ),
         },
-    ];    
+    ];  
+    
+    const CorporateTableColumns = [
+        // {
+        //     title: 'Account Number',
+        //     dataIndex: 'AccountNumber',
+        //     key: 'acctNumber',
+        //     sorter: (a, b) => a.AccountNumber.localeCompare(b.AccountNumber),
+        //     width: '5%',
+        //     render: (record) => {
+        //         return <Text strong>{record}</Text>
+        //     }
+        // },
+        {
+            title: 'Customer Id',
+            dataIndex: 'Customer_ID',
+            key: 'customerId',
+            sorter: (a, b) => a.Customer_ID.localeCompare(b.Customer_ID),
+            width: '5%',
+            render: (record) => {
+                return <Text strong>{record}</Text>
+            }
+        },
+        {
+            title: 'Client Name',
+            dataIndex: 'Coporate_Client',
+            key: 'corporateClient',
+            sorter: (a, b) => a.Coporate_Client.localeCompare(b.Coporate_Client),
+            width: '5%',
+            render: (record) => {
+                return <Text strong>{record}</Text>
+            }
+        },
+        {
+            title: 'RC Number',
+            dataIndex: 'RC_Number',
+            key: 'rc_number',
+            sorter: (a, b) => a.Customer_ID.localeCompare(b.Customer_ID),
+            width: '5%',
+            render: (record) => {
+                return <Text strong>{record}</Text>
+            }
+        },
+        {
+            title: 'Business Sector',
+            dataIndex: 'Business_Sector',
+            key: 'business_sector',
+            sorter: (a, b) => a.Business_Sector.localeCompare(b.Business_Sector),
+            width: '5%',
+            render: (record) => {
+                return <Text strong>{record}</Text>
+            }
+        },
+        {
+            title: 'Business Type',
+            dataIndex: 'Business_Type',
+            key: 'business_type',
+            sorter: (a, b) => a.Business_Type.localeCompare(b.Business_Type),
+            width: '5%',
+            render: (record) => {
+                return <Text strong>{record}</Text>
+            }
+        },
+    ]
+
+    const IndividualClientsTable = ()=>{
+
+        return (
+            <Table
+                columns={fullTableColumns}
+                dataSource={data}
+                loading={tableLoading}
+                pagination={{
+                    pageSize: 10,
+                    showSizeChanger: true,
+                    showTotal: (total) => `Total ${total} items`,
+                    pageSizeOptions: ['5', '10', '20', '50'],
+                }}
+                rowKey={(row)=>row.AccountNumber}
+                style={{
+                    background: 'white'
+                }}
+                bordered
+                // onRow={(record) => ({
+                //     onClick: () => handleViewClient(record.key),
+                //     style: { cursor: 'pointer' }
+                // })}
+            />
+        )
+    }
+
+    const IncompleteCorporateClients = ()=>{
+
+        return (
+            <Table
+                columns={CorporateTableColumns}
+                dataSource={corporateClientData}
+                loading={tableLoading}
+                pagination={{
+                    pageSize: 10,
+                    showSizeChanger: true,
+                    showTotal: (total) => `Total ${total} items`,
+                    pageSizeOptions: ['5', '10', '20', '50'],
+                }}
+                rowKey={(row)=>row.AccountNumber}
+                style={{
+                    background: 'white'
+                }}
+                bordered
+                // onRow={(record) => ({
+                //     onClick: () => handleViewClient(record.key),
+                //     style: { cursor: 'pointer' }
+                // })}
+            />
+        )
+    }
+
+    const items = [
+        {
+            key: '1',
+            label: 'Individial Clients',
+            children: <IndividualClientsTable/>,
+        },
+        {
+            key: '2',
+            label: 'Corporate Clients',
+            children: <IncompleteCorporateClients/>,
+        }
+    ];
+    const onChange = key => {
+        // console.log(key);
+    };
+    
 
     return(
         <Spin spinning={tableLoading} size="large" tip="Loading client data...">
@@ -550,26 +710,7 @@ function IncompleteOnboarding() {
             </div>
 
             {/* Data Table */}
-            <Table
-            columns={fullTableColumns}
-            dataSource={data}
-            loading={tableLoading}
-            pagination={{
-                pageSize: 10,
-                showSizeChanger: true,
-                showTotal: (total) => `Total ${total} items`,
-                pageSizeOptions: ['5', '10', '20', '50'],
-            }}
-            rowKey={(row)=>row.AccountNumber}
-            style={{
-                background: 'white'
-            }}
-            bordered
-            // onRow={(record) => ({
-            //     onClick: () => handleViewClient(record.key),
-            //     style: { cursor: 'pointer' }
-            // })}
-            />
+            <Tabs defaultActiveKey="1" items={items} onChange={onChange} />
         </div>
         </Spin>
     )

@@ -28,6 +28,7 @@ const DirectorForm = ({
     const countries = utilities.countryOptions;
     const titles = utilities.titleOptions;
     const states = utilities.stateOptions;
+    const idType = utilities.idCardTypeOptions
 
     const handleRemove = (id) => {
         if (directors.length > 1) {
@@ -41,8 +42,8 @@ const DirectorForm = ({
     // Get director display name for accordion header
     const getDirectorDisplayName = (directorId, index) => {
         const data = directorData[directorId];
-        if (data && (data.Director_FirstName || data.Director_LastName)) {
-            return `${data.Director_FirstName || ''} ${data.Director_LastName || ''}`.trim();
+        if (data && (data.FirstName || data.LastName)) {
+            return `${data.FirstName || ''} ${data.LastName || ''}`.trim();
         }
         return `Director ${index + 1}`;
     };
@@ -133,21 +134,16 @@ const DirectorForm = ({
             try {
                 const base64String = await getBase64(file);
                 const fileName = file.name;
-
                 if (!base64String) {
-                    console.error("Base64 conversion failed - empty result");
                     return false;
                 }
 
-                // Store base64 in form for validation
                 form.setFieldsValue({
                     [fieldName]: base64String
                 });
 
                 const fieldNameWithoutId = fieldName.replace(`_${directorId}`, '');
 
-                // Map form fields to API fields and their corresponding name fields
-                // Note: Backend API has inconsistent naming (_Name vs _name, and field name differences)
                 const fieldMapping = {
                     'Proof_Of_Address_Document': {
                         documentField: 'Proof_Of_Address_Document',
@@ -180,28 +176,19 @@ const DirectorForm = ({
                 };
 
                 const mapping = fieldMapping[fieldNameWithoutId];
-
                 if (mapping) {
-                    // Store BOTH document and filename
-                    // Note: Using forEach to call onFieldChange twice, but with functional setState
-                    // in the hook, this properly merges both updates
                     const updateFields = {
                         [mapping.documentField]: base64String,
                         [mapping.nameField]: fileName
                     };
-
                     Object.entries(updateFields).forEach(([field, value]) => {
                         onFieldChange(directorId, field, value);
                     });
-
-                    message.success(`${fileName} uploaded successfully`); 
-                } else { 
-                    console.error("No mapping found for field:", fieldNameWithoutId); 
+                } else {
+                    console.error("No mapping found for field:", fieldNameWithoutId);
                 }
-
                 return false;
             } catch (error) {
-                console.error('Error converting file to base64:', error);
                 return false;
             }
         };        
@@ -293,13 +280,13 @@ const DirectorForm = ({
                     <Col span={12}>
                         <Form.Item 
                             label={<span style={{ fontSize: '15px', fontWeight: '500' }}> Lastname </span>} 
-                            name={`Director_LastName_${directorId}`}
+                            name={`LastName_${directorId}`}
                             rules={[{ required: true, message: 'Required' }]}
                         >
                             <Input 
                                 placeholder="Last Name"
                                 size="large"
-                                onChange={(e) => onFieldChange(directorId, 'Director_LastName', e.target.value)}
+                                onChange={(e) => onFieldChange(directorId, 'LastName', e.target.value)}
                             />
                         </Form.Item>
                     </Col>
@@ -515,7 +502,7 @@ const DirectorForm = ({
                         <span style={{ fontSize: '15px', fontWeight: '500' }}>
                             Country Code
                         </span>}
-                        name="Mobile_Number1_Country_Code"
+                        name={`Mobile_Number1_Country_Code_${directorId}`}
                         rules={[
                             { required: true, message: 'Please enter mobile number' }
                         ]}
@@ -534,7 +521,7 @@ const DirectorForm = ({
                         <span style={{ fontSize: '15px', fontWeight: '500' }}>
                             Mobile number 
                         </span>}
-                        name="Mobile_Number1"
+                        name={`Mobile_Number1_${directorId}`}
                         rules={[
                             { required: true, message: 'Please enter mobile number' }
                         ]}
@@ -551,7 +538,7 @@ const DirectorForm = ({
                     <Col xs={24} md={8}>
                         <Form.Item 
                         label={<span style={{ fontSize: '15px', fontWeight: '500' }}>Email Address</span>}
-                        name="Email"
+                        name={`Email_${directorId}`}
                         rules={[
                             { required: true, message: 'Please enter email' },
                             { type: 'email', message: 'Please enter a valid email' }
@@ -597,8 +584,8 @@ const DirectorForm = ({
                     <Col span={12}>
                         <Form.Item 
                             label={<span style={{ fontSize: '15px', fontWeight: '500' }}> Identification Type </span>} 
-                            name={`Country_${directorId}`}
-                            rules={[{ required: true, message: 'Please select birth country' }]}
+                            name={`ID_Type_${directorId}`}
+                            rules={[{ required: true, message: 'Please select Id type' }]}
                         >
                             <Select 
                                 showSearch
@@ -609,11 +596,8 @@ const DirectorForm = ({
                                     option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                                 }
                             >
-                                {countries && countries.map((country, index) => (
-                                    <Option key={index} value={country.Value}>
-                                        {country.Name}
-                                    </Option>
-                                ))}
+                                <Select.Option value="Valid">Driver's Licence</Select.Option>
+                                <Select.Option value="Invalid">NIMC</Select.Option>
                             </Select>
                         </Form.Item>
                     </Col>
