@@ -197,6 +197,25 @@ const OnboardClientPage = () => {
             Residential_Country: getValueFromName(clientData.Residential_Country, utilities.countryOptions),
             Residential_State: getValueFromName(clientData.Residential_State, utilities.stateOptions),
           }
+
+          // Populate director form fields with _${directorId} suffix
+          if (location.state.directorData) {
+            Object.entries(location.state.directorData).forEach(([directorId, data]) => {
+              Object.entries(data).forEach(([fieldName, value]) => {
+                initialValues[`${fieldName}_${directorId}`] = value
+              })
+            })
+          }
+
+          // Populate shareholder form fields with _${shareholderId} suffix
+          if (location.state.shareholderData) {
+            Object.entries(location.state.shareholderData).forEach(([shareholderId, data]) => {
+              Object.entries(data).forEach(([fieldName, value]) => {
+                initialValues[`${fieldName}_${shareholderId}`] = value
+              })
+            })
+          }
+
           form.setFieldsValue(initialValues);
         }
         // Individual client resume (existing logic)
