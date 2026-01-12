@@ -10,7 +10,7 @@ import {
   EditOutlined
 } from '@ant-design/icons';
 import { useAuth } from '../contexts/AuthContext';
-import { getValueFromName, getNameFromValue } from '../utils/utils';
+import { getValueFromName, getNameFromValue, formatDateForInput } from '../utils/utils';
 import utilitiesService from '../services/utilitiesService';
 
 const {Text} = Typography
@@ -397,6 +397,123 @@ function IncompleteOnboarding() {
         })
     }
 
+    // Corporate onboarding resume functions
+    const fetchCorporateOnboardingDetails = async (accountNumber) => {
+        try {
+            const response = await fetch(
+                `${BASE_URL}/CorporateClientsOnboarding/Get_Ongoing_CorporateClient_Details?accountNumber=${accountNumber}`,
+                {
+                    headers: {
+                        "Authorization": `Bearer ${token}`
+                    }
+                }
+            )
+            if (response.status === 401) {
+                console.log('Token expired or unauthorized');
+                logout()
+                navigate('/login')
+            }
+            else if (!response.ok) {
+                throw new Error(`Response status: ${response.status}`)
+            }
+            const data = await response.json()
+            return data.Data
+        } catch (error) {
+            console.log("An error occurred", error)
+        }
+    }
+
+    const getCorporateOnboardingStep = (clientData) => {
+        let onboardingStep;
+        // Note: API uses "Shareholder" (singular)
+        if (!clientData.Directors || clientData.Directors.length === 0) {
+            onboardingStep = 2
+        }
+        else if (!clientData.Shareholder || clientData.Shareholder.length === 0) {
+            onboardingStep = 3
+        }
+        else if (!clientData.Documents || clientData.Documents.length === 0) {
+            onboardingStep = 4
+        }
+        else {
+            onboardingStep = 5
+        }
+        return onboardingStep
+    }
+
+    const handleEditCorporateClient = async (accountNumber) => {
+        const data = await fetchCorporateOnboardingDetails(accountNumber)
+        const onboardingStep = getCorporateOnboardingStep(data)
+
+        // Transform directors data - map select fields to values
+        const directorData = {}
+        data.Directors?.forEach((director, index) => {
+            const selectFields = ['Title', 'Country', 'State_Of_Residency', 'Nationality', 'State_Of_Origin', 'ID_Type']
+            let transformedDirector = { ...director }
+
+            selectFields.forEach(field => {
+                if (field === 'Title') {
+                    transformedDirector[field] = getValueFromName(director[field], utilities.titleOptions)
+                } else if (field === 'Country' || field === 'Nationality') {
+                    transformedDirector[field] = getValueFromName(director[field], utilities.countryOptions)
+                } else if (field === 'State_Of_Residency' || field === 'State_Of_Origin') {
+                    transformedDirector[field] = getValueFromName(director[field], utilities.stateOptions)
+                } else if (field === 'ID_Type') {
+                    transformedDirector[field] = getValueFromName(director[field], utilities.idCardTypeOptions)
+                }
+            })
+
+            // Format date fields
+            if (director.Date_Of_Birth) {
+                transformedDirector.Date_Of_Birth = formatDateForInput(director.Date_Of_Birth)
+            }
+            if (director.Id_Card_Expiry_Date) {
+                transformedDirector.Id_Card_Expiry_Date = formatDateForInput(director.Id_Card_Expiry_Date)
+            }
+
+            directorData[index] = transformedDirector
+        })
+
+        const directors = Array.from(
+            { length: data.Directors?.length || 0 },
+            (_, i) => ({ id: i })
+        )
+
+        // Transform shareholders data (API uses "Shareholder" singular)
+        const shareholderData = {}
+        data.Shareholder?.forEach((shareholder, index) => {
+            shareholderData[index] = { ...shareholder }
+        })
+
+        const shareholders = Array.from(
+            { length: data.Shareholder?.length || 0 },
+            (_, i) => ({ id: i })
+        )
+
+        // Transform documents (reuse existing transformData function)
+        const docs = transformData(data.Documents || [])
+
+        // Prepare corporate client data
+        // Note: API uses "CoporateClientDetails" (typo - missing 'r')
+        const clientData = {
+            ...data.CoporateClientDetails,
+            clientType: "Corporate"
+        }
+
+        navigate('/onboard-client', {
+            state: {
+                onboardingStep,
+                clientData,
+                directors,
+                directorData,
+                shareholders,
+                shareholderData,
+                docs,
+                isCorporate: true
+            }
+        })
+    }
+
     // Filter data based on all criteria
     const filterData = (search, type, status) => {
         // setTableLoading(true);
@@ -569,7 +686,7 @@ function IncompleteOnboarding() {
                     <Button
                         type="link"
                         icon={<EditOutlined />}
-                        onClick={() => handleEditClient(record.AccountNumber)}
+                        onClick={() => handleEditCorporateClient(record.Customer_ID)}
                         style={{ padding: '4px 8px', color: '#1890ff' }}
                     >
                         {/* Edit */}

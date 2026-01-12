@@ -159,19 +159,48 @@ const OnboardClientPage = () => {
         setFiles([]);
         setKycTypes([]);
         setBeneficiaries([{id : 0}])
+        setDirectors([{id : 0}])
+        setShareholders([{id : 0}])
         return;
       }
       const locationState = location.state;
       setResumeOnboardingData(locationState.clientData)
       setIsResuming(true)
-      setResumeFiles(locationState.docs.files)
-      setResumeKycTypes(locationState.docs.kycTypes)
+      setResumeFiles(locationState.docs?.files || [])
+      setResumeKycTypes(locationState.docs?.kycTypes || [])
+
+      // Handle corporate resume
+      if (locationState.isCorporate) {
+        setFormData(prev => ({ ...prev, clientType: "Corporate" }))
+        setFormSteps(corporateSteps)
+        setCurrentStep(locationState.onboardingStep)
+
+        if (locationState.directors?.length > 0) {
+          setDirectors(locationState.directors)
+          setDirectorData(locationState.directorData)
+        }
+        if (locationState.shareholders?.length > 0) {
+          setShareholders(locationState.shareholders)
+          setShareholderData(locationState.shareholderData)
+        }
+      }
     }, [])
 
     useEffect(() => {
       if (resumeOnboardingData && Object.keys(resumeOnboardingData).length > 0) {
         const clientData = resumeOnboardingData;
 
+        // Corporate client resume
+        if (location.state?.isCorporate) {
+          const initialValues = {
+            ...clientData,
+            Residential_Country: getValueFromName(clientData.Residential_Country, utilities.countryOptions),
+            Residential_State: getValueFromName(clientData.Residential_State, utilities.stateOptions),
+          }
+          form.setFieldsValue(initialValues);
+        }
+        // Individual client resume (existing logic)
+        else {
           const initialValues = {
             ...clientData,
 
@@ -189,7 +218,7 @@ const OnboardClientPage = () => {
 
             // Maritial_Status: clientData.Marital_Status || clientData.Maritial_Status || '',
             Maritial_Status : getValueFromName(clientData.Marital_Status, utilities.maritalStatusOptions),
-            DATE_OF_BIRTH: formatDateForInput(clientData.Date_Of_Birth || '') ,      
+            DATE_OF_BIRTH: formatDateForInput(clientData.Date_Of_Birth || '') ,
 
             Nok_Title : getValueFromName(clientData.Nok_Title, utilities.titleOptions),
             Nok_State : getValueFromName(clientData.Nok_State, utilities.stateOptions),
@@ -204,7 +233,8 @@ const OnboardClientPage = () => {
           setBeneficiaries(location.state.beneficiaries)
           setBeneficiaryData(location.state.beneficiaryData)
         }
-      
+      }
+
     }, [resumeOnboardingData, form, utilities]);
 
     // Corporate onboarding
