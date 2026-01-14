@@ -142,7 +142,7 @@ const DirectorForm = ({
                     [fieldName]: base64String
                 });
 
-                const fieldNameWithoutId = fieldName.replace(`_${directorId}`, '');
+                const fieldNameWithoutId = fieldName.replace(`director_`, '').replace(`_${directorId}`, '');
 
                 const fieldMapping = {
                     'Proof_Of_Address_Document': {
@@ -215,7 +215,7 @@ const DirectorForm = ({
                     <Col span={12}>
                         <Form.Item 
                             label={<span style={{ fontSize: '15px', fontWeight: '500' }}> Seqnum </span>}  
-                            name={`SeQNum_${directorId}`}
+                            name={`director_SeQNum_${directorId}`}
                         >
                             <Input 
                                 disabled
@@ -231,7 +231,7 @@ const DirectorForm = ({
                     <Col span={12}>
                         <Form.Item 
                             label={<span style={{ fontSize: '15px', fontWeight: '500' }}> Title</span>} 
-                            name={`Title_${directorId}`}
+                            name={`director_Title_${directorId}`}
                             rules={[{ required: true, message: 'Required' }]}
                         >
                             <Select 
@@ -250,7 +250,7 @@ const DirectorForm = ({
                     <Col span={12}>
                         <Form.Item 
                             label={<span style={{ fontSize: '15px', fontWeight: '500' }}> First Name</span>} 
-                            name={`FirstName_${directorId}`}
+                            name={`director_FirstName_${directorId}`}
                             rules={[{ required: true, message: 'Required' }]}
                         >
                             <Input 
@@ -266,7 +266,7 @@ const DirectorForm = ({
                     <Col span={12}>
                         <Form.Item 
                             label={<span style={{ fontSize: '15px', fontWeight: '500' }}> Other Name</span>} 
-                            name={`OtherName_${directorId}`}
+                            name={`director_OtherName_${directorId}`}
                             rules={[{ required: true, message: 'Required' }]}
                         >
                             <Input 
@@ -280,7 +280,7 @@ const DirectorForm = ({
                     <Col span={12}>
                         <Form.Item 
                             label={<span style={{ fontSize: '15px', fontWeight: '500' }}> Lastname </span>} 
-                            name={`LastName_${directorId}`}
+                            name={`director_LastName_${directorId}`}
                             rules={[{ required: true, message: 'Required' }]}
                         >
                             <Input 
@@ -297,7 +297,7 @@ const DirectorForm = ({
                     <Col span={12}>
                         <Form.Item 
                             label={<span style={{ fontSize: '15px', fontWeight: '500' }}> State Of Origin </span>} 
-                            name={`State_Of_Origin_${directorId}`}
+                            name={`director_State_Of_Origin_${directorId}`}
                             rules={[{ required: true, message: 'Please enter state' }]}
                         >
                             <Select 
@@ -321,7 +321,7 @@ const DirectorForm = ({
                     <Col span={12}>
                         <Form.Item 
                             label={<span style={{ fontSize: '15px', fontWeight: '500' }}> Date Of Birth</span>} 
-                            name={`Date_Of_Birth_${directorId}`}
+                            name={`director_Date_Of_Birth_${directorId}`}
                             rules={[{ required: true, message: 'Required' }]}
                         >
                             <Input 
@@ -337,7 +337,7 @@ const DirectorForm = ({
                     <Col span={12}>
                         <Form.Item 
                             label={<span style={{ fontSize: '15px', fontWeight: '500' }}> Nationality </span>} 
-                            name={`Nationality_${directorId}`}
+                            name={`director_Nationality_${directorId}`}
                             rules={[{ required: true, message: 'Please select nationality' }]}
                         >
                             <Select 
@@ -376,7 +376,7 @@ const DirectorForm = ({
                     <Col span={12}>
                         <Form.Item 
                             label={<span style={{ fontSize: '15px', fontWeight: '500' }}> Country</span>} 
-                            name={`Country_${directorId}`}
+                            name={`director_Country_${directorId}`}
                             rules={[{ required: true, message: 'Please select country' }]}
                         >
                             <Select 
@@ -400,7 +400,7 @@ const DirectorForm = ({
                     <Col span={12}>
                         <Form.Item 
                             label={<span style={{ fontSize: '15px', fontWeight: '500' }}> City</span>} 
-                            name={`City_${directorId}`}
+                            name={`director_City_${directorId}`}
                         >
                             <Input 
                                 placeholder="City"
@@ -415,7 +415,7 @@ const DirectorForm = ({
                     <Col span={12}>
                         <Form.Item 
                             label={<span style={{ fontSize: '15px', fontWeight: '500' }}> State </span>} 
-                            name={`State_Of_Residency_${directorId}`}
+                            name={`director_State_Of_Residency_${directorId}`}
                             rules={[{ required: true, message: 'Please enter state' }]}
                         >
                             <Select 
@@ -439,7 +439,7 @@ const DirectorForm = ({
                     <Col span={12}>
                         <Form.Item 
                             label={<span style={{ fontSize: '15px', fontWeight: '500' }}> Proof of Address Type</span>} 
-                            name={`Prof_Of_Address_Type_${directorId}`}
+                            name={`director_Prof_Of_Address_Type_${directorId}`}
                             rules={[{ required: true, message: 'Please select address type' }]}
                         >
                             <Select 
@@ -464,12 +464,12 @@ const DirectorForm = ({
                     <Col span={24}>
                         <Form.Item 
                             label={<span style={{ fontSize: '15px', fontWeight: '500' }}> Proof of Address Document</span>} 
-                            name={`Proof_Of_Address_Document_${directorId}`}
+                            name={`director_Proof_Of_Address_Document_${directorId}`}
                             rules={[{ required: true, message: 'Please enter Address' }]}
                             getValueFromEvent={() => undefined}
                         >
                             <Upload
-                                beforeUpload={(file) => handleUpload(file, `Proof_Of_Address_Document_${directorId}`)}
+                                beforeUpload={(file) => handleUpload(file, `director_Proof_Of_Address_Document_${directorId}`)}
                                 showUploadList={false}
                                 accept=".pdf,.jpg,.jpeg,.png,.doc,.docx"
                                 
@@ -502,7 +502,7 @@ const DirectorForm = ({
                         <span style={{ fontSize: '15px', fontWeight: '500' }}>
                             Country Code
                         </span>}
-                        name={`Mobile_Number1_Country_Code_${directorId}`}
+                        name={`director_Mobile_Number1_Country_Code_${directorId}`}
                         rules={[
                             { required: true, message: 'Please enter mobile number' }
                         ]}
@@ -521,7 +521,7 @@ const DirectorForm = ({
                         <span style={{ fontSize: '15px', fontWeight: '500' }}>
                             Mobile number 
                         </span>}
-                        name={`Mobile_Number1_${directorId}`}
+                        name={`director_Mobile_Number1_${directorId}`}
                         rules={[
                             { required: true, message: 'Please enter mobile number' }
                         ]}
@@ -538,7 +538,7 @@ const DirectorForm = ({
                     <Col xs={24} md={8}>
                         <Form.Item 
                         label={<span style={{ fontSize: '15px', fontWeight: '500' }}>Email Address</span>}
-                        name={`Email_${directorId}`}
+                        name={`director_Email_${directorId}`}
                         rules={[
                             { required: true, message: 'Please enter email' },
                             { type: 'email', message: 'Please enter a valid email' }
@@ -571,7 +571,7 @@ const DirectorForm = ({
                     <Col span={12}>
                         <Form.Item 
                             label={<span style={{ fontSize: '15px', fontWeight: '500' }}> BVN </span>} 
-                            name={`BVN_${directorId}`}
+                            name={`director_BVN_${directorId}`}
                             rules={[{ required: true, message: 'Please enter BVN' }]}
                         >
                             <Input 
@@ -584,7 +584,7 @@ const DirectorForm = ({
                     <Col span={12}>
                         <Form.Item 
                             label={<span style={{ fontSize: '15px', fontWeight: '500' }}> Identification Type </span>} 
-                            name={`ID_Type_${directorId}`}
+                            name={`director_ID_Type_${directorId}`}
                             rules={[{ required: true, message: 'Please select Id type' }]}
                         >
                             <Select 
@@ -609,7 +609,7 @@ const DirectorForm = ({
                     <Col span={8}>
                         <Form.Item 
                             label={<span style={{ fontSize: '15px', fontWeight: '500' }}> Identification Number </span>} 
-                            name={`ID_Number_${directorId}`}
+                            name={`director_ID_Number_${directorId}`}
                         >
                             <Input 
                                 placeholder="Identification Number"
@@ -622,7 +622,7 @@ const DirectorForm = ({
                     <Col span={8}>
                         <Form.Item 
                             label={<span style={{ fontSize: '15px', fontWeight: '500' }}>Identification Expiry Date</span>} 
-                            name={`Id_Card_Expiry_Date_${directorId}`}
+                            name={`director_Id_Card_Expiry_Date_${directorId}`}
                             rules={[{ required: true, message: 'Required' }]}
                         >
                             <Input 
@@ -636,7 +636,7 @@ const DirectorForm = ({
                     <Col span={8}>
                         <Form.Item 
                             label={<span style={{ fontSize: '15px', fontWeight: '500' }}> Identification Validity </span>} 
-                            name={`Identification_Validity_${directorId}`}
+                            name={`director_Identification_Validity_${directorId}`}
                             rules={[{ required: true, message: 'Please select Identification validity' }]}
                         >
                             <Select 
@@ -659,11 +659,11 @@ const DirectorForm = ({
                     <Col span={16}>
                         <Form.Item 
                             label={<span style={{ fontSize: '15px', fontWeight: '500' }}>Identification Document Upload</span>} 
-                            name={`Identification_Document_${directorId}`}
+                            name={`director_Identification_Document_${directorId}`}
                             rules={[{ required: true, message: 'Please enter Address' }]}
                         >
                             <Upload
-                                beforeUpload={(file) => handleUpload(file, `Identification_Document_${directorId}`)}
+                                beforeUpload={(file) => handleUpload(file, `director_Identification_Document_${directorId}`)}
                                 showUploadList={false}
                                 accept=".pdf,.jpg,.jpeg,.png,.doc,.docx"
                             >
@@ -676,11 +676,11 @@ const DirectorForm = ({
                     <Col span={16}>
                         <Form.Item 
                             label={<span style={{ fontSize: '15px', fontWeight: '500' }}>Passport Photograph Upload</span>} 
-                            name={`Passport_Photograph_${directorId}`}
+                            name={`director_Passport_Photograph_${directorId}`}
                             rules={[{ required: true, message: 'Please upload Passport Photograph' }]}
                         >
                             <Upload
-                                beforeUpload={(file) => handleUpload(file, `Passport_Photograph_${directorId}`)}
+                                beforeUpload={(file) => handleUpload(file, `director_Passport_Photograph_${directorId}`)}
                                 showUploadList={false}
                                 accept=".jpg,.jpeg,.png"
                             >
@@ -708,7 +708,7 @@ const DirectorForm = ({
                     <Col span={8}>
                         <Form.Item 
                             label={<span style={{ fontSize: '15px', fontWeight: '500' }}> Occupation</span>} 
-                            name={`Occupation_${directorId}`}
+                            name={`director_Occupation_${directorId}`}
                             rules={[{ required: true, message: 'Required' }]}
                         >
                         <Input 
@@ -722,7 +722,7 @@ const DirectorForm = ({
                     <Col span={8}>
                         <Form.Item 
                             label={<span style={{ fontSize: '15px', fontWeight: '500' }}> Source of Wealth </span>} 
-                            name={`Source_Of_Wealth_${directorId}`}
+                            name={`director_Source_Of_Wealth_${directorId}`}
                             rules={[{ required: true, message: 'Required' }]}
                         >
                         <Input 
@@ -738,7 +738,7 @@ const DirectorForm = ({
                     <Col span={8}>
                         <Form.Item 
                             label={<span style={{ fontSize: '15px', fontWeight: '500' }}> PEP Status </span>} 
-                            name={`PEP_Status_${directorId}`}
+                            name={`director_PEP_Status_${directorId}`}
                             rules={[{ required: true, message: 'Please select PEP Status' }]}
                         >
                             <Select 
@@ -758,7 +758,7 @@ const DirectorForm = ({
                     <Col span={8}>
                         <Form.Item 
                             label={<span style={{ fontSize: '15px', fontWeight: '500' }}> PEP Approval Status </span>} 
-                            name={`PEP_Approval_Status_${directorId}`}
+                            name={`director_PEP_Approval_Status_${directorId}`}
                             rules={[{ required: true, message: 'Please select PEP Status' }]}
                         >
                             <Select 
@@ -779,7 +779,7 @@ const DirectorForm = ({
                     <Col span={8}>
                         <Form.Item 
                             label={<span style={{ fontSize: '15px', fontWeight: '500' }}> Sanction Screening Status </span>} 
-                            name={`Sanction_Screening_Status_${directorId}`}
+                            name={`director_Sanction_Screening_Status_${directorId}`}
                             rules={[{ required: true, message: 'Please select Sanction Screening Status' }]}
                         >
                             <Select 
@@ -801,11 +801,11 @@ const DirectorForm = ({
                     <Col span={8}>
                         <Form.Item 
                             label={<span style={{ fontSize: '15px', fontWeight: '500' }}>PEP Approval Document Upload</span>} 
-                            name={`PEP_Approval_Document_${directorId}`}
+                            name={`director_PEP_Approval_Document_${directorId}`}
                             rules={[{ required: true, message: 'Please enter Address' }]}
                         >
                             <Upload
-                                beforeUpload={(file) => handleUpload(file, `PEP_Approval_Document_${directorId}`)}
+                                beforeUpload={(file) => handleUpload(file, `director_PEP_Approval_Document_${directorId}`)}
                                 showUploadList={false}
                                 accept=".pdf,.jpg,.jpeg,.png,.doc,.docx"
                             >
@@ -818,11 +818,11 @@ const DirectorForm = ({
                     <Col span={8}>
                         <Form.Item 
                             label={<span style={{ fontSize: '15px', fontWeight: '500' }}>International Passport Upload</span>} 
-                            name={`International_Passport_${directorId}`}
+                            name={`director_International_Passport_${directorId}`}
                             rules={[{ required: true, message: 'Please upload Passport Photograph' }]}
                         >
                             <Upload
-                                beforeUpload={(file) => handleUpload(file, `International_Passport_${directorId}`)}
+                                beforeUpload={(file) => handleUpload(file, `director_International_Passport_${directorId}`)}
                                 showUploadList={false}
                                 accept=".jpg,.jpeg,.png"
                             >
@@ -835,11 +835,11 @@ const DirectorForm = ({
                     <Col span={8}>
                         <Form.Item 
                             label={<span style={{ fontSize: '15px', fontWeight: '500' }}>Sanction Screening Document Upload</span>} 
-                            name={`Sanction_Screening_${directorId}`}
+                            name={`director_Sanction_Screening_${directorId}`}
                             rules={[{ required: true, message: 'Please upload Sanction Screening' }]}
                         >
                             <Upload
-                                beforeUpload={(file) => handleUpload(file, `Sanction_Screening_${directorId}`)}
+                                beforeUpload={(file) => handleUpload(file, `director_Sanction_Screening_${directorId}`)}
                                 showUploadList={false}
                                 accept=".jpg,.jpeg,.png"
                             >
@@ -852,11 +852,11 @@ const DirectorForm = ({
                     <Col span={8}>
                         <Form.Item 
                             label={<span style={{ fontSize: '15px', fontWeight: '500' }}> Safe Watch Document Upload</span>} 
-                            name={`Safe_Watch_${directorId}`}
+                            name={`director_Safe_Watch_${directorId}`}
                             rules={[{ required: true, message: 'Required' }]}
                         >
                         <Upload
-                                beforeUpload={(file) => handleUpload(file, `Safe_Watch_${directorId}`)}
+                                beforeUpload={(file) => handleUpload(file, `director_Safe_Watch_${directorId}`)}
                                 showUploadList={false}
                                 accept=".jpg,.jpeg,.png"
                             >

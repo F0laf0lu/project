@@ -132,7 +132,7 @@ const ShareholderForm = ({
                     [fieldName]: base64String
                 });
 
-                const fieldNameWithoutId = fieldName.replace(`_${shareholderId}`, '');
+                const fieldNameWithoutId = fieldName.replace(`shareholder_`, '').replace(`_${shareholderId}`, '');
 
                 // Map form fields to API fields and their corresponding name fields
                 // Note: Backend API has "Inorporate" typo - preserve for API compatibility
@@ -194,7 +194,7 @@ const ShareholderForm = ({
                     <Col span={6}>
                         <Form.Item
                             label={<span style={{ fontSize: '15px', fontWeight: '500' }}>Title</span>}
-                            name={`Title_${shareholderId}`}
+                            name={`shareholder_Title_${shareholderId}`}
                             rules={[{ required: true, message: 'Required' }]}
                         >
                             <Select
@@ -214,7 +214,7 @@ const ShareholderForm = ({
                     <Col span={6}>
                         <Form.Item
                             label={<span style={{ fontSize: '15px', fontWeight: '500' }}>First Name</span>}
-                            name={`FirstName_${shareholderId}`}
+                            name={`shareholder_FirstName_${shareholderId}`}
                             rules={[{ required: true, message: 'Required' }]}
                         >
                             <Input
@@ -228,7 +228,7 @@ const ShareholderForm = ({
                     <Col span={6}>
                         <Form.Item
                             label={<span style={{ fontSize: '15px', fontWeight: '500' }}>Other Name</span>}
-                            name={`OtherName_${shareholderId}`}
+                            name={`shareholder_OtherName_${shareholderId}`}
                             rules={[{ required: true, message: 'Required' }]}
                         >
                             <Input
@@ -242,7 +242,7 @@ const ShareholderForm = ({
                     <Col span={6}>
                         <Form.Item
                             label={<span style={{ fontSize: '15px', fontWeight: '500' }}>Last Name</span>}
-                            name={`LastName_${shareholderId}`}
+                            name={`shareholder_LastName_${shareholderId}`}
                             rules={[{ required: true, message: 'Required' }]}
                         >
                             <Input
@@ -271,7 +271,7 @@ const ShareholderForm = ({
                     <Col span={12}>
                         <Form.Item
                             label={<span style={{ fontSize: '15px', fontWeight: '500' }}>Shareholder Type</span>}
-                            name={`Shareholder_Type_${shareholderId}`}
+                            name={`shareholder_Shareholder_Type_${shareholderId}`}
                             rules={[{ required: true, message: 'Required' }]}
                         >
                             <Select
@@ -288,7 +288,7 @@ const ShareholderForm = ({
                     <Col span={12}>
                         <Form.Item
                             label={<span style={{ fontSize: '15px', fontWeight: '500' }}>ID Card Type</span>}
-                            name={`ID_Card_Type_${shareholderId}`}
+                            name={`shareholder_ID_Card_Type_${shareholderId}`}
                             rules={[{ required: true, message: 'Required' }]}
                         >
                             <Select
@@ -327,12 +327,12 @@ const ShareholderForm = ({
                     <Col span={12}>
                         <Form.Item
                             label={<span style={{ fontSize: '15px', fontWeight: '500' }}>Incorporate Shareholder Document</span>}
-                            name={`Inorporate_Shareholder_${shareholderId}`}
+                            name={`shareholder_Inorporate_Shareholder_${shareholderId}`}
                             rules={[{ required: true, message: 'Please upload document' }]}
                             getValueFromEvent={() => undefined}
                         >
                             <Upload
-                                beforeUpload={(file) => handleUpload(file, `Inorporate_Shareholder_${shareholderId}`)}
+                                beforeUpload={(file) => handleUpload(file, `shareholder_Inorporate_Shareholder_${shareholderId}`)}
                                 showUploadList={false}
                                 accept=".pdf,.jpg,.jpeg,.png,.doc,.docx"
                             >
@@ -346,12 +346,12 @@ const ShareholderForm = ({
                     <Col span={12}>
                         <Form.Item
                             label={<span style={{ fontSize: '15px', fontWeight: '500' }}>Shareholder Proof ID</span>}
-                            name={`Shareholder_Proof_ID_${shareholderId}`}
+                            name={`shareholder_Shareholder_Proof_ID_${shareholderId}`}
                             rules={[{ required: true, message: 'Please upload proof ID' }]}
                             getValueFromEvent={() => undefined}
                         >
                             <Upload
-                                beforeUpload={(file) => handleUpload(file, `Shareholder_Proof_ID_${shareholderId}`)}
+                                beforeUpload={(file) => handleUpload(file, `shareholder_Shareholder_Proof_ID_${shareholderId}`)}
                                 showUploadList={false}
                                 accept=".pdf,.jpg,.jpeg,.png,.doc,.docx"
                             >
@@ -443,4 +443,4 @@ const ShareholderForm = ({
     );
 };
 
-export default ShareholderForm;
+export default ShareholderForm; 
