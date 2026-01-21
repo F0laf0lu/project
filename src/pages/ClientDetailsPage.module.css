@@ -1,0 +1,12 @@
+.container {
+  background: var(--color-bg-page, #f0f5ff);
+  min-height: calc(100vh - 120px);
+  padding: var(--spacing-3xl, 40px);
+}
+
+.tabsContainer {
+  background: var(--color-bg-base, white);
+  border-radius: var(--radius-md, 8px);
+  box-shadow: var(--shadow-card, 0 2px 8px rgba(0, 0, 0, 0.1));
+  padding: var(--spacing-xl, 24px);
+}

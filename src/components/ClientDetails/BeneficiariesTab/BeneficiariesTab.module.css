@@ -1,0 +1,104 @@
+.container {
+  box-shadow: var(--shadow-card, 0 2px 8px rgba(0, 0, 0, 0.1));
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-xl, 24px);
+}
+
+.title {
+  color: var(--color-primary, #1890ff);
+  font-size: var(--font-size-lg, 16px);
+  font-weight: var(--font-weight-semibold, 600);
+  margin: 0;
+}
+
+.empty {
+  background: var(--color-bg-secondary, #fafafa);
+  padding: var(--spacing-4xl, 48px);
+  text-align: center;
+  border-radius: var(--radius-md, 8px);
+  border: 2px dashed var(--color-border-primary, #d9d9d9);
+}
+
+.emptyIcon {
+  font-size: 48px;
+  color: var(--color-text-placeholder, #bfbfbf);
+  margin-bottom: var(--spacing-md, 12px);
+}
+
+.emptyText {
+  color: var(--color-text-tertiary, #999);
+  margin: 0;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg, 16px);
+}
+
+.card {
+  background: var(--color-bg-secondary, #fafafa);
+  border: 1px solid var(--color-border-secondary, #e8e8e8);
+}
+
+.cardEditing {
+  background: var(--color-bg-highlight, #f0f5ff);
+  border: 2px solid var(--color-primary, #1890ff);
+}
+
+.field {
+  margin-bottom: var(--spacing-sm, 8px);
+}
+
+.fieldLabel {
+  color: var(--color-text-tertiary, #8c8c8c);
+  font-size: var(--font-size-xs, 12px);
+  margin-bottom: var(--spacing-xs, 4px);
+}
+
+.fieldValue {
+  font-size: var(--font-size-base, 14px);
+  font-weight: var(--font-weight-medium, 500);
+  color: var(--color-text-primary, #262626);
+}
+
+.fieldValueBold {
+  font-size: var(--font-size-md, 15px);
+  font-weight: var(--font-weight-semibold, 600);
+  color: var(--color-text-primary, #262626);
+}
+
+.fieldValuePrimary {
+  font-size: var(--font-size-md, 15px);
+  font-weight: var(--font-weight-medium, 500);
+  color: var(--color-primary, #1890ff);
+}
+
+.formItem {
+  margin-bottom: var(--spacing-sm, 8px);
+}
+
+.actionsCol {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.summary {
+  background: var(--color-bg-highlight, #f0f5ff);
+  padding: var(--spacing-lg, 16px);
+  border-radius: var(--radius-base, 6px);
+  margin-top: var(--spacing-xl, 24px);
+  border: 1px solid var(--color-primary-border, #d6e4ff);
+}
+
+.summaryText {
+  color: var(--color-text-secondary, #666);
+  margin: 0;
+  font-size: var(--font-size-sm, 13px);
+}

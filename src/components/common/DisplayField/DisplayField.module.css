@@ -1,0 +1,19 @@
+.field {
+  margin-bottom: var(--spacing-lg, 16px);
+}
+
+.label {
+  color: var(--color-text-tertiary, #8c8c8c);
+  font-size: var(--font-size-sm, 13px);
+  margin-bottom: var(--spacing-xs, 4px);
+}
+
+.value {
+  font-size: var(--font-size-md, 15px);
+  font-weight: var(--font-weight-medium, 500);
+  color: var(--color-text-primary, #262626);
+}
+
+.empty {
+  color: var(--color-text-placeholder, #bfbfbf);
+}

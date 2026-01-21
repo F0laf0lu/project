@@ -1,0 +1,39 @@
+.container {
+  background: var(--color-bg-base, white);
+  padding: var(--spacing-2xl, 32px);
+  border-radius: var(--radius-md, 8px);
+  box-shadow: var(--shadow-card, 0 2px 8px rgba(0, 0, 0, 0.1));
+  margin-bottom: var(--spacing-xl, 24px);
+}
+
+.backButton {
+  margin-bottom: var(--spacing-lg, 16px);
+}
+
+.content {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.info {
+  flex: 1;
+}
+
+.name {
+  color: var(--color-primary, #1890ff);
+  font-size: var(--font-size-4xl, 28px);
+  font-weight: var(--font-weight-semibold, 600);
+  margin: 0 0 var(--spacing-md, 12px) 0;
+}
+
+.tags {
+  display: flex;
+  gap: var(--spacing-md, 12px);
+  flex-wrap: wrap;
+}
+
+.tag {
+  font-size: var(--font-size-base, 14px);
+  padding: var(--spacing-xs, 4px) var(--spacing-md, 12px);
+}

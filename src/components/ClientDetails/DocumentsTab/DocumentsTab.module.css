@@ -1,0 +1,69 @@
+.container {
+  box-shadow: var(--shadow-card, 0 2px 8px rgba(0, 0, 0, 0.1));
+}
+
+.title {
+  color: var(--color-primary, #1890ff);
+  font-size: var(--font-size-lg, 16px);
+  font-weight: var(--font-weight-semibold, 600);
+  margin-bottom: var(--spacing-xl, 24px);
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md, 12px);
+}
+
+.docCardUploaded {
+  background: var(--color-success-bg, #f6ffed);
+  border: 1px solid var(--color-success-border, #b7eb8f);
+}
+
+.docCardPending {
+  background: var(--color-warning-bg, #fff2e8);
+  border: 1px solid var(--color-warning-border, #ffd591);
+}
+
+.iconSuccess {
+  font-size: 24px;
+  color: var(--color-success, #52c41a);
+}
+
+.iconWarning {
+  font-size: 24px;
+  color: var(--color-warning, #faad14);
+}
+
+.docName {
+  font-size: var(--font-size-md, 15px);
+  font-weight: var(--font-weight-medium, 500);
+  color: var(--color-text-primary, #262626);
+}
+
+.docMeta {
+  font-size: var(--font-size-xs, 12px);
+  color: var(--color-text-tertiary, #8c8c8c);
+}
+
+.docMetaPending {
+  font-size: var(--font-size-xs, 12px);
+  color: #d46b08;
+}
+
+.summary {
+  background: var(--color-bg-highlight, #f0f5ff);
+  padding: var(--spacing-lg, 16px);
+  border-radius: var(--radius-base, 6px);
+  margin-top: var(--spacing-xl, 24px);
+  border: 1px solid var(--color-primary-border, #d6e4ff);
+}
+
+.summaryText {
+  font-size: var(--font-size-sm, 13px);
+  color: var(--color-text-secondary, #666);
+}
+
+.summaryRight {
+  text-align: right;
+}

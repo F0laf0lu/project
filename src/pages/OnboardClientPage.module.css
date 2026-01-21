@@ -1,0 +1,20 @@
+.container {
+  min-height: calc(100vh - 120px);
+  padding: var(--spacing-5xl, 60px) var(--spacing-3xl, 40px);
+}
+
+.formSection {
+  padding: var(--spacing-5xl, 60px) 0;
+  min-height: 400px;
+}
+
+.formCard {
+  background: var(--color-bg-base, white);
+  padding: var(--spacing-5xl, 60px);
+  border-radius: var(--radius-md, 8px);
+  margin: 0 auto;
+}
+
+.formContent {
+  min-height: 350px;
+}

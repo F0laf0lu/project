@@ -1,0 +1,168 @@
+.title {
+  color: var(--color-primary, #1890ff);
+  font-size: var(--font-size-3xl, 24px);
+  margin-bottom: var(--spacing-lg, 16px);
+  font-weight: var(--font-weight-semibold, 600);
+}
+
+.description {
+  color: var(--color-text-secondary, #666);
+  margin-bottom: var(--spacing-2xl, 32px);
+  font-size: var(--font-size-md, 15px);
+}
+
+.section {
+  margin-bottom: var(--spacing-2xl, 32px);
+  background: var(--color-bg-base, white);
+  padding: var(--spacing-xl, 24px);
+  border-radius: var(--radius-md, 8px);
+  border: 2px solid var(--color-border-secondary, #e8e8e8);
+}
+
+.subsection {
+  margin-bottom: var(--spacing-lg, 16px);
+  padding-bottom: var(--spacing-lg, 16px);
+  border-bottom: 1px solid var(--color-border-tertiary, #f0f0f0);
+}
+
+.subsectionTitle {
+  color: var(--color-text-secondary, #595959);
+  font-size: var(--font-size-base, 14px);
+  font-weight: var(--font-weight-semibold, 600);
+  margin-bottom: var(--spacing-md, 12px);
+}
+
+.fieldLabel {
+  color: var(--color-text-tertiary, #8c8c8c);
+  font-size: var(--font-size-xs, 12px);
+}
+
+.fieldValue {
+  font-size: var(--font-size-base, 14px);
+  font-weight: var(--font-weight-medium, 500);
+}
+
+.empty {
+  color: var(--color-text-placeholder, #bfbfbf);
+}
+
+.valueText {
+  color: var(--color-text-primary, #262626);
+}
+
+.collapse {
+  background-color: transparent;
+}
+
+.panel {
+  margin-bottom: var(--spacing-lg, 16px);
+}
+
+.panelHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md, 12px);
+}
+
+.panelName {
+  font-size: var(--font-size-md, 15px);
+  font-weight: var(--font-weight-medium, 500);
+}
+
+.reviewSubheader {
+  font-size: var(--font-size-base, 14px);
+  font-weight: var(--font-weight-semibold, 600);
+  color: var(--color-text-secondary, #595959);
+  border-bottom: 1px solid var(--color-border-secondary, #e8e8e8);
+  padding-bottom: var(--spacing-sm, 8px);
+  margin-bottom: var(--spacing-md, 12px);
+  margin-top: var(--spacing-md, 12px);
+}
+
+.documentTags {
+  display: flex;
+  gap: var(--spacing-sm, 8px);
+  flex-wrap: wrap;
+}
+
+.docStatus {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm, 8px);
+  margin-bottom: var(--spacing-sm, 8px);
+}
+
+.iconSuccess {
+  color: var(--color-success, #52c41a);
+  font-size: 18px;
+}
+
+.iconError {
+  color: var(--color-error, #ff4d4f);
+  font-size: 18px;
+}
+
+.docLabel {
+  color: var(--color-text-primary, #262626);
+  font-size: var(--font-size-base, 14px);
+}
+
+.docLabelMuted {
+  color: var(--color-text-tertiary, #999);
+  font-size: var(--font-size-base, 14px);
+}
+
+.fileName {
+  font-weight: var(--font-weight-medium, 500);
+}
+
+.field {
+  margin-bottom: var(--spacing-md, 12px);
+}
+
+.beneficiaryItem {
+  margin-bottom: var(--spacing-lg, 16px);
+  padding-bottom: var(--spacing-lg, 16px);
+}
+
+.withBorder {
+  border-bottom: 1px solid var(--color-border-tertiary, #f0f0f0);
+}
+
+.beneficiaryRow {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm, 8px);
+  margin-bottom: var(--spacing-sm, 8px);
+}
+
+.beneficiaryName {
+  font-size: var(--font-size-base, 14px);
+  font-weight: var(--font-weight-medium, 500);
+  color: var(--color-text-primary, #262626);
+}
+
+.submitSection {
+  background: var(--color-bg-highlight, #f0f5ff);
+  padding: var(--spacing-xl, 24px);
+  border-radius: var(--radius-md, 8px);
+  border: 2px solid var(--color-primary, #1890ff);
+  margin-top: var(--spacing-2xl, 32px);
+}
+
+.submitTitle {
+  color: var(--color-primary, #1890ff);
+  margin-bottom: var(--spacing-lg, 16px);
+  font-size: var(--font-size-lg, 16px);
+  font-weight: var(--font-weight-semibold, 600);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm, 8px);
+}
+
+.submitText {
+  color: var(--color-text-primary, #262626);
+  margin: 0;
+  font-size: var(--font-size-base, 14px);
+  line-height: var(--line-height-relaxed, 1.6);
+}

@@ -1,0 +1,27 @@
+.container {
+  background: var(--color-bg-base, white);
+  padding: 30px;
+  border-bottom: 1px solid var(--color-border-secondary, #e8e8e8);
+}
+
+.content {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.title {
+  color: var(--color-primary, #1890ff);
+  margin-bottom: 10px;
+  font-size: var(--font-size-5xl, 32px);
+  font-weight: var(--font-weight-semibold, 600);
+}
+
+.icon {
+  margin-right: var(--spacing-md, 12px);
+}
+
+.subtitle {
+  color: var(--color-text-secondary, #666);
+  font-size: var(--font-size-lg, 16px);
+  margin: 0;
+}

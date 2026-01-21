@@ -1,0 +1,31 @@
+.container {
+  margin-bottom: 0;
+  margin-top: var(--spacing-4xl, 48px);
+  padding-top: var(--spacing-2xl, 32px);
+  border-top: 1px solid var(--color-border-tertiary, #f0f0f0);
+}
+
+.space {
+  width: 100%;
+  justify-content: space-between;
+}
+
+.cancelButton {
+  min-width: 120px;
+}
+
+.navButton {
+  min-width: 120px;
+}
+
+.primaryButton {
+  background: var(--color-primary, #1890ff);
+  border-color: var(--color-primary, #1890ff);
+  min-width: 120px;
+}
+
+.submitButton {
+  background: var(--color-primary, #1890ff);
+  border-color: var(--color-primary, #1890ff);
+  min-width: 180px;
+}

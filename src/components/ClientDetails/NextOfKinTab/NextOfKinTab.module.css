@@ -1,0 +1,31 @@
+.card {
+  box-shadow: var(--shadow-card, 0 2px 8px rgba(0, 0, 0, 0.1));
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-xl, 24px);
+}
+
+.title {
+  color: var(--color-primary, #1890ff);
+  font-size: var(--font-size-lg, 16px);
+  font-weight: var(--font-weight-semibold, 600);
+  margin: 0;
+}
+
+.note {
+  background: var(--color-bg-highlight, #f0f5ff);
+  padding: var(--spacing-lg, 16px);
+  border-radius: var(--radius-base, 6px);
+  margin-top: var(--spacing-xl, 24px);
+  border: 1px solid var(--color-primary-border, #d6e4ff);
+}
+
+.noteText {
+  color: var(--color-text-secondary, #666);
+  margin: 0;
+  font-size: var(--font-size-sm, 13px);
+}
