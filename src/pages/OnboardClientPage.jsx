@@ -19,6 +19,9 @@ import { useBeneficiaries } from '../hooks/individualOnboardingHooks/useBenefici
 import { useDirectors } from '../hooks/corporateOnboardingHooks/useDirectors';
 import { useShareholders } from '../hooks/corporateOnboardingHooks/useShareholders';
 import { useFileUpload } from '../hooks/individualOnboardingHooks/useFileUploads';
+import { useProducts } from '../hooks/useProducts';
+import ProductSelectionForm from '../components/Onboarding/ProductSelectionForm';
+import { ShoppingOutlined } from '@ant-design/icons';
 
 
 
@@ -61,6 +64,10 @@ const OnboardClientPage = () => {
   const {files, kycTypes, addFile, removeFile,resumeFiles, resumeKycTypes,
      setFiles, setKycTypes, setResumeFiles, setResumeKycTypes} = useFileUpload();
 
+  const {products, productData, activeProductKeys, addProduct, removeProduct,
+        updateProductField, getAllProductsData, resetProducts,
+        setActiveProductKeys, setProducts, setProductData} = useProducts();
+
   const navigate = useNavigate()
   const [tableLoading, setTableLoading] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
@@ -82,7 +89,8 @@ const OnboardClientPage = () => {
       1 : "clientDetails",
       2 : "nokDetails",
       3 : "uploadedDocs",
-      4 : "beneficiaryDetails"
+      4 : "beneficiaryDetails",
+      5 : "productDetails"
    }
 
    const individualSteps = [
@@ -106,10 +114,14 @@ const OnboardClientPage = () => {
         title: 'Add Beneficiaries',
         icon: <TeamOutlined />,
       },
-      { 
+      {
+        title: 'Select Products',
+        icon: <ShoppingOutlined />,
+      },
+      {
         title: 'Review & Submit',
         icon: <CheckOutlined />,
-      }    
+      }
    ]
 
    const corporateSteps = [
@@ -132,6 +144,10 @@ const OnboardClientPage = () => {
       {
         title: 'Upload Documents',
         icon: <FileTextOutlined />,
+      },
+      {
+        title: 'Select Products',
+        icon: <ShoppingOutlined />,
       },
       {
         title: 'Review & Submit',
@@ -276,15 +292,21 @@ const OnboardClientPage = () => {
             files, kycTypes
         }
       }
+      if (currentStep === 5) {
+        currentValues = {
+          Products: getAllProductsData()
+        }
+      }
 
       let key;
-      if (currentStep !== 5) {
+      if (currentStep !== 6) {
         const corporateStepMap = {
           0: "clientType",
           1: "clientDetails",
           2: "directorsDetails",
           3: "shareholdersDetails",
-          4: "uploadedDocs"
+          4: "uploadedDocs",
+          5: "productDetails"
         }
         key = corporateStepMap[currentStep]
         setFormData(prev => ({
@@ -308,41 +330,41 @@ const OnboardClientPage = () => {
         case 1:
           console.log(key, currentValues)
 
-          result = await clientService.addCorporateClient(currentValues, authUser.UserName, { accountNumber })
-          console.log(result)
-          if (result && result.Success) {
-            showNotification("success", {
-              message: result.Message
-            })
-            setFormData(prev => ({ ...prev, accountNumber: result.Data?.Generated_AccountNumber }));
-          } else {
-            message.error("Failed to save corporate client details")
-            return;
-          }
+          // result = await clientService.addCorporateClient(currentValues, 'authUser.UserName', { accountNumber })
+          // console.log(result)
+          // if (result && result.Success) {
+          //   showNotification("success", {
+          //     message: result.Message
+          //   })
+          //   setFormData(prev => ({ ...prev, accountNumber: result.Data?.Generated_AccountNumber }));
+          // } else {
+          //   message.error("Failed to save corporate client details")
+          //   return;
+          // }
           break
         case 2:
           console.log(key, currentValues)
-          result = await clientService.submitDirectors(currentValues.Directors, accountNumber, authUser.UserName);
-          if (result && result.Success) {
-            showNotification("success", {
-              message: result.Message
-            })
-          } else {
-            message.error('Failed to save directors details');
-            return;
-          }
+          // result = await clientService.submitDirectors(currentValues.Directors, accountNumber, 'authUser.UserName');
+          // if (result && result.Success) {
+          //   showNotification("success", {
+          //     message: result.Message
+          //   })
+          // } else {
+          //   message.error('Failed to save directors details');
+          //   return;
+          // }
           break
         case 3:
           console.log(key, currentValues)
-          result = await clientService.submitShareholders(currentValues.Shareholders, accountNumber, authUser.UserName);
-          if (result && result.Success) {
-            showNotification("success", {
-              message: result.Message
-            })
-          } else {
-            message.error('Failed to save shareholders details');
-            return;
-          }
+          // result = await clientService.submitShareholders(currentValues.Shareholders, accountNumber, authUser.UserName);
+          // if (result && result.Success) {
+          //   showNotification("success", {
+          //     message: result.Message
+          //   })
+          // } else {
+          //   message.error('Failed to save shareholders details');
+          //   return;
+          // }
           break
         case 4:
           // if (isResuming && files.length == 0) {
@@ -359,6 +381,11 @@ const OnboardClientPage = () => {
           //   })
           //   return;
           // }
+          break
+        case 5:
+          // Products step - data already stored in formData
+          console.log(key, currentValues)
+          message.success('Products saved');
           break
         default:
           console.log(key, currentValues)
@@ -378,16 +405,21 @@ const OnboardClientPage = () => {
         if (currentStep === 3) {
           currentValues = {
             files, kycTypes
-          } 
+          }
         }
         else if (currentStep === 4) {
           currentValues = {
             Beneficiaries: getAllBeneficiariesData()
           }
         }
+        else if (currentStep === 5) {
+          currentValues = {
+            Products: getAllProductsData()
+          }
+        }
 
         let key;
-        if (currentStep != 5) {
+        if (currentStep != 6) {
           key = stepMap[currentStep]
           setFormData(prev=>({
                 ...prev, [key]:{
@@ -466,6 +498,11 @@ const OnboardClientPage = () => {
               return;
             }
             break
+          case 5:
+            // Products step - data already stored in formData
+            console.log(key, currentValues)
+            message.success('Products saved');
+            break
           default:
             console.log(key, currentValues)
             break;
@@ -508,7 +545,8 @@ const OnboardClientPage = () => {
         setFiles([]);
         setKycTypes([])
         setBeneficiaryData({})
-        setBeneficiaries([]); 
+        setBeneficiaries([]);
+        resetProducts();
     }
 
     return (
@@ -630,7 +668,17 @@ const OnboardClientPage = () => {
                             resumeKycTypes={resumeKycTypes}
                             resumeFiles={resumeFiles}
                     />}
-                    {currentStep === 5 && <ReviewOnboarding
+                    {currentStep === 5 && <ProductSelectionForm
+                            form={form}
+                            products={products}
+                            productData={productData}
+                            onAddProduct={addProduct}
+                            onRemoveProduct={removeProduct}
+                            onFieldChange={updateProductField}
+                            activeKeys={activeProductKeys}
+                            onActiveKeysChange={setActiveProductKeys}
+                    />}
+                    {currentStep === 6 && <ReviewOnboarding
                             form={form} beneficiaries={beneficiaries}
                             files={files}
                             kycTypes={kycTypes}
@@ -639,6 +687,8 @@ const OnboardClientPage = () => {
                             directorData={directorData}
                             shareholders={shareholders}
                             shareholderData={shareholderData}
+                            products={products}
+                            productData={productData}
                     />}
                   </>
                   ) : (
@@ -656,7 +706,7 @@ const OnboardClientPage = () => {
                             resumeKycTypes={resumeKycTypes}
                             resumeFiles={resumeFiles}
                     />}
-                    {currentStep === 4 && <BeneficiaryForm 
+                    {currentStep === 4 && <BeneficiaryForm
                             form={form}
                             utilities={utilities}
                             beneficiaries={beneficiaries}
@@ -667,11 +717,23 @@ const OnboardClientPage = () => {
                             activeKeys={activeKeys}
                             onActiveKeysChange={setActiveKeys}
                       />}
-                    {currentStep === 5 && <ReviewOnboarding 
+                    {currentStep === 5 && <ProductSelectionForm
+                            form={form}
+                            products={products}
+                            productData={productData}
+                            onAddProduct={addProduct}
+                            onRemoveProduct={removeProduct}
+                            onFieldChange={updateProductField}
+                            activeKeys={activeProductKeys}
+                            onActiveKeysChange={setActiveProductKeys}
+                    />}
+                    {currentStep === 6 && <ReviewOnboarding
                             form={form} beneficiaries={beneficiaries}
-                            files={files} 
+                            files={files}
                             kycTypes={kycTypes}
-                            utilities={utilities} 
+                            utilities={utilities}
+                            products={products}
+                            productData={productData}
                     />}
                   </>
                   )

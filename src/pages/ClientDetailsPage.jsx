@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Table, Input, Button, Space, Tag, Tabs, Select, Layout, Menu, Avatar, Dropdown, Card, Row, Col, Statistic, Spin, Form, message, Steps, Upload } from 'antd';
-import { 
+import {
   TeamOutlined,
   IdcardOutlined,
   ArrowLeftOutlined,
@@ -19,8 +19,8 @@ import {
   CloseCircleOutlined,
   UploadOutlined,
   CheckOutlined
-
 } from '@ant-design/icons';
+import { AVAILABLE_PRODUCTS, PRODUCT_STATUS_OPTIONS } from '../data/mockProducts';
 
 
 
@@ -28,7 +28,18 @@ import {
     const location = useLocation();
     const [selectedClient, setSelectedClient] = useState(null);
 
-    const clientDetails = location.state || null
+    const clientData =   {
+    key: '1',
+    name: 'Acme Corporation',
+    contactPerson: 'John Smith',
+    email: 'john@acmecorp.com',
+    phone: '+1-555-0101',
+    clientType: 'Corporate',
+    status: 'Active',
+    joinDate: '2024-10-15',
+  }
+
+    const clientDetails = location.state || clientData
 
 
     // if (!selectedClient) {
@@ -37,9 +48,25 @@ import {
 
     const client = clientDetails;
     const [editForm] = Form.useForm();
+    const [productForm] = Form.useForm();
     const [isEditingPersonal, setIsEditingPersonal] = useState(false);
     const [isEditingNextOfKin, setIsEditingNextOfKin] = useState(false);
     const [editingBeneficiaryId, setEditingBeneficiaryId] = useState(null);
+
+    // Products state
+    const [clientProducts, setClientProducts] = useState(() => {
+      // Initialize with client's existing product if any
+      if (client?.product) {
+        return [{
+          id: 0,
+          name: client.product,
+          status: 'Active',
+          startDate: client.joinDate || new Date().toISOString().split('T')[0]
+        }];
+      }
+      return [];
+    });
+    const [isAddingProduct, setIsAddingProduct] = useState(false);
 
 
 
@@ -804,69 +831,147 @@ import {
     };
 
     // Products Tab Content
-    const ProductsTab = () => (
-      <Card bordered={false} style={{ boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
-          <h4 style={{ color: '#1890ff', fontSize: '16px', fontWeight: '600', margin: 0 }}>
-            Subscribed Products
-          </h4>
-        </div>
+    const ProductsTab = () => {
+      const handleAddProduct = (values) => {
+        const newProduct = {
+          id: Date.now(),
+          name: values.productName,
+          status: values.status || 'Pending',
+          startDate: values.startDate
+        };
+        setClientProducts([...clientProducts, newProduct]);
+        setIsAddingProduct(false);
+        productForm.resetFields();
+        message.success('Product added successfully');
+      };
 
-        <Card
-          size="small"
-          style={{ 
-            background: '#fafafa',
-            border: '2px solid #e8e8e8',
-            marginBottom: '16px'
-          }}
-        >
-          <Row gutter={[16, 12]}>
-            <Col xs={24} md={8}>
-              <div style={{ marginBottom: '8px' }}>
-                <div style={{ color: '#8c8c8c', fontSize: '12px', marginBottom: '4px' }}>Product Name</div>
-                <div style={{ fontSize: '16px', fontWeight: '600', color: '#1890ff' }}>
-                  {client.product || 'No product assigned'}
-                </div>
-              </div>
-            </Col>
-            <Col xs={12} md={5}>
-              <div style={{ marginBottom: '8px' }}>
-                <div style={{ color: '#8c8c8c', fontSize: '12px', marginBottom: '4px' }}>Status</div>
-                <Tag color="green">Active</Tag>
-              </div>
-            </Col>
-            <Col xs={12} md={5}>
-              <div style={{ marginBottom: '8px' }}>
-                <div style={{ color: '#8c8c8c', fontSize: '12px', marginBottom: '4px' }}>Start Date</div>
-                <div style={{ fontSize: '14px', fontWeight: '500', color: '#262626' }}>
-                  {client.joinDate}
-                </div>
-              </div>
-            </Col>
-            <Col xs={24} md={6} style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
-              <Button type="link" icon={<EyeOutlined />}>View Details</Button>
-            </Col>
-          </Row>
+      const handleRemoveProduct = (productId) => {
+        setClientProducts(clientProducts.filter(p => p.id !== productId));
+        message.success('Product removed');
+      };
+
+      return (
+        <Card bordered={false} style={{ boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
+            <h4 style={{ color: '#1890ff', fontSize: '16px', fontWeight: '600', margin: 0 }}>
+              Subscribed Products ({clientProducts.length})
+            </h4>
+            <Button type="primary" icon={<PlusOutlined />} onClick={() => setIsAddingProduct(true)}>
+              Add Product
+            </Button>
+          </div>
+
+          {/* Add Product Form */}
+          {isAddingProduct && (
+            <Card style={{ marginBottom: '16px', background: '#f6ffed', border: '1px solid #b7eb8f' }}>
+              <Form form={productForm} onFinish={handleAddProduct} layout="vertical">
+                <Row gutter={16}>
+                  <Col span={8}>
+                    <Form.Item name="productName" label="Product" rules={[{ required: true, message: 'Please select a product' }]}>
+                      <Select placeholder="Select product" size="large">
+                        {AVAILABLE_PRODUCTS.map(p => (
+                          <Select.Option key={p.Product_ID} value={p.Product_Name}>
+                            {p.Product_Name}
+                          </Select.Option>
+                        ))}
+                      </Select>
+                    </Form.Item>
+                  </Col>
+                  <Col span={6}>
+                    <Form.Item name="status" label="Status" initialValue="Pending">
+                      <Select size="large">
+                        {PRODUCT_STATUS_OPTIONS.map(s => (
+                          <Select.Option key={s.Value} value={s.Value}>{s.Name}</Select.Option>
+                        ))}
+                      </Select>
+                    </Form.Item>
+                  </Col>
+                  <Col span={6}>
+                    <Form.Item name="startDate" label="Start Date" rules={[{ required: true, message: 'Please select start date' }]}>
+                      <Input type="date" size="large" />
+                    </Form.Item>
+                  </Col>
+                  <Col span={4} style={{ display: 'flex', alignItems: 'flex-end', paddingBottom: '24px' }}>
+                    <Space>
+                      <Button onClick={() => { setIsAddingProduct(false); productForm.resetFields(); }}>Cancel</Button>
+                      <Button type="primary" htmlType="submit">Add</Button>
+                    </Space>
+                  </Col>
+                </Row>
+              </Form>
+            </Card>
+          )}
+
+          {/* Product List */}
+          {clientProducts.map((product) => (
+            <Card
+              key={product.id}
+              size="small"
+              style={{
+                background: '#fafafa',
+                border: '2px solid #e8e8e8',
+                marginBottom: '16px'
+              }}
+            >
+              <Row gutter={[16, 12]} align="middle">
+                <Col xs={24} md={8}>
+                  <div style={{ marginBottom: '8px' }}>
+                    <div style={{ color: '#8c8c8c', fontSize: '12px', marginBottom: '4px' }}>Product Name</div>
+                    <div style={{ fontSize: '16px', fontWeight: '600', color: '#1890ff' }}>
+                      {product.name}
+                    </div>
+                  </div>
+                </Col>
+                <Col xs={12} md={5}>
+                  <div style={{ marginBottom: '8px' }}>
+                    <div style={{ color: '#8c8c8c', fontSize: '12px', marginBottom: '4px' }}>Status</div>
+                    <Tag color={product.status === 'Active' ? 'green' : product.status === 'Pending' ? 'blue' : 'default'}>
+                      {product.status}
+                    </Tag>
+                  </div>
+                </Col>
+                <Col xs={12} md={5}>
+                  <div style={{ marginBottom: '8px' }}>
+                    <div style={{ color: '#8c8c8c', fontSize: '12px', marginBottom: '4px' }}>Start Date</div>
+                    <div style={{ fontSize: '14px', fontWeight: '500', color: '#262626' }}>
+                      {product.startDate}
+                    </div>
+                  </div>
+                </Col>
+                <Col xs={24} md={6} style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
+                  <Space>
+                    <Button type="link" icon={<EyeOutlined />}>View</Button>
+                    <Button type="link" danger icon={<DeleteOutlined />} onClick={() => handleRemoveProduct(product.id)}>
+                      Remove
+                    </Button>
+                  </Space>
+                </Col>
+              </Row>
+            </Card>
+          ))}
+
+          {/* Empty State */}
+          {clientProducts.length === 0 && !isAddingProduct && (
+            <div style={{
+              background: '#f9f9f9',
+              padding: '32px',
+              textAlign: 'center',
+              borderRadius: '6px',
+              border: '2px dashed #d9d9d9',
+              marginTop: '24px'
+            }}>
+              <ShoppingOutlined style={{ fontSize: '48px', color: '#bfbfbf', marginBottom: '12px' }} />
+              <p style={{ color: '#999', margin: '0 0 16px 0', fontSize: '14px' }}>
+                No products subscribed yet
+              </p>
+              <Button type="primary" icon={<PlusOutlined />} onClick={() => setIsAddingProduct(true)}>
+                Add First Product
+              </Button>
+            </div>
+          )}
         </Card>
-
-        <div style={{
-          background: '#f9f9f9',
-          padding: '32px',
-          textAlign: 'center',
-          borderRadius: '6px',
-          border: '2px dashed #d9d9d9',
-          marginTop: '24px'
-        }}>
-          <ShoppingOutlined style={{ fontSize: '48px', color: '#bfbfbf', marginBottom: '12px' }} />
-          <p style={{ color: '#999', margin: '0 0 16px 0', fontSize: '14px' }}>
-            Want to add more products?
-          </p>
-          <Button type="primary" icon={<PlusOutlined />}>
-            Add Product
-          </Button>
-        </div>
-      </Card>
-    );
+      );
+    };
 
     // Uploaded Documents Tab Content
     const DocumentsTab = () => {

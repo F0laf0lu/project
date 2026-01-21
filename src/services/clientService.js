@@ -237,6 +237,61 @@ class ClientService {
 
     return response.data;
   }
+
+  // ============================================
+  // Product Methods (Placeholder - implement when backend is ready)
+  // ============================================
+
+  /**
+   * Submit products for a client during onboarding
+   * @param {Array} products - Array of product objects
+   * @param {string} accountNumber - Client account number
+   * @param {string} userName - Current user's name
+   * @returns {Object} - API response
+   */
+  async submitProducts(products, accountNumber, userName) {
+    // TODO: Implement when backend is ready
+    // Placeholder - returns mock success
+    console.log('Products to submit:', products, accountNumber, userName);
+    return { Success: true, Message: 'Products saved (mock)', Data: products };
+  }
+
+  /**
+   * Get products for a client
+   * @param {string} accountNumber - Client account number
+   * @returns {Object} - API response with products array
+   */
+  async getClientProducts(accountNumber) {
+    // TODO: Implement when backend is ready
+    // Placeholder - returns empty array
+    console.log('Getting products for:', accountNumber);
+    return { Success: true, Message: 'Products retrieved (mock)', Data: [] };
+  }
+
+  /**
+   * Add a single product to an existing client
+   * @param {Object} productData - Product data object
+   * @param {string} accountNumber - Client account number
+   * @param {string} userName - Current user's name
+   * @returns {Object} - API response
+   */
+  async addProductToClient(productData, accountNumber, userName) {
+    // TODO: Implement when backend is ready
+    console.log('Adding product:', productData, accountNumber, userName);
+    return { Success: true, Message: 'Product added (mock)', Data: productData };
+  }
+
+  /**
+   * Remove a product from an existing client
+   * @param {string} productId - Product ID to remove
+   * @param {string} accountNumber - Client account number
+   * @returns {Object} - API response
+   */
+  async removeProductFromClient(productId, accountNumber) {
+    // TODO: Implement when backend is ready
+    console.log('Removing product:', productId, accountNumber);
+    return { Success: true, Message: 'Product removed (mock)' };
+  }
 }
 
 export default new ClientService();

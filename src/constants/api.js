@@ -39,7 +39,7 @@ export const API_ENDPOINTS = {
 
     ADD_INDIVIDUAL: "/IndividualClientsOnboarding/Add_Individual_Clients",
     ADD_RELATIONSHIP: "/IndividualClientsOnboarding/Add_Relationship_To_IndividualClients",
-    
+
     UPLOAD_DOCUMENTS: "/IndividualClientsOnboarding/Kyc-Upload",
     ADD_BENEFICIARIES: "/IndividualClientsOnboarding/Add_List_Of_Beneficiaries_To_IndividualClients",
 
@@ -50,6 +50,13 @@ export const API_ENDPOINTS = {
 
     COMPLETED_CLIENT_LIST : "/IndividualClientsOnboarding/Get_List_Of_Completed_IndividualClients",
     COMPLETED_CLIENT_DETAILS : "/IndividualClientsOnboarding/Get_Completed_Individual_ClientDetails",
+
+    // Product endpoints (placeholder - implement when backend is ready)
+    PRODUCTS: {
+      ADD_PRODUCT: "/IndividualClientsOnboarding/Add_Product",
+      GET_PRODUCTS: "/IndividualClientsOnboarding/Get_Client_Products",
+      REMOVE_PRODUCT: "/IndividualClientsOnboarding/Remove_Product",
+    },
   },
 
   CORPORATECLIENTS:{
@@ -64,6 +71,13 @@ export const API_ENDPOINTS = {
 
     COMPLETED_CLIENT_LIST : "/CorporateClientsOnboarding/Get_List_Of_Completed_CorporateClients",
     COMPLETED_CLIENT_DETAILS : "/CorporateClientsOnboarding/Get_Completed_CorporateClient_Details",
+
+    // Product endpoints (placeholder - implement when backend is ready)
+    PRODUCTS: {
+      ADD_PRODUCT: "/CorporateClientsOnboarding/Add_Product",
+      GET_PRODUCTS: "/CorporateClientsOnboarding/Get_Client_Products",
+      REMOVE_PRODUCT: "/CorporateClientsOnboarding/Remove_Product",
+    },
   }
 };
 

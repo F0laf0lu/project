@@ -2,11 +2,11 @@ import { Space, Tag, Select, List, Row, Col, Card, Collapse } from 'antd';
 
 const { Panel } = Collapse;
 
-import { UserOutlined, TeamOutlined,FileTextOutlined,IdcardOutlined,CheckCircleOutlined,CloseCircleOutlined } from '@ant-design/icons';
+import { UserOutlined, TeamOutlined, FileTextOutlined, IdcardOutlined, CheckCircleOutlined, CloseCircleOutlined, ShoppingOutlined } from '@ant-design/icons';
 import { getValueFromName, getNameFromValue } from '../../utils/utils';
 
 
-const ReviewOnboarding = ({form, beneficiaries, files, kycTypes, utilities, directors, directorData, shareholders, shareholderData}) => {
+const ReviewOnboarding = ({form, beneficiaries, files, kycTypes, utilities, directors, directorData, shareholders, shareholderData, products, productData}) => {
       const clientType = form.getFieldValue('clientType');
       const companyType = form.getFieldValue('companyType');
 
@@ -803,17 +803,17 @@ const ReviewOnboarding = ({form, beneficiaries, files, kycTypes, utilities, dire
 
           {/* Step 5: Beneficiaries */}
           {clientType === 'Individual' && beneficiaries.length > 0 && (
-            <div style={{ 
+            <div style={{
               marginBottom: '32px',
               background: 'white',
               padding: '24px',
               borderRadius: '8px',
               border: '2px solid #e8e8e8'
             }}>
-              <h4 style={{ 
-                color: '#1890ff', 
-                fontSize: '16px', 
-                fontWeight: '600', 
+              <h4 style={{
+                color: '#1890ff',
+                fontSize: '16px',
+                fontWeight: '600',
                 marginBottom: '16px',
                 display: 'flex',
                 alignItems: 'center',
@@ -827,11 +827,11 @@ const ReviewOnboarding = ({form, beneficiaries, files, kycTypes, utilities, dire
                 const firstName = form.getFieldValue(`Beneficiary_FirstName_${beneficiary.id}`);
                 const lastName = form.getFieldValue(`Beneficiary_LastName_${beneficiary.id}`);
                 const relationship = form.getFieldValue(`Beneficiary_Relationship_${beneficiary.id}`);
-                
+
                 return (
-                  <div 
+                  <div
                     key={beneficiary.id}
-                    style={{ 
+                    style={{
                       marginBottom: index < beneficiaries.length - 1 ? '16px' : '0',
                       paddingBottom: index < beneficiaries.length - 1 ? '16px' : '0',
                       borderBottom: index < beneficiaries.length - 1 ? '1px solid #f0f0f0' : 'none'
@@ -846,6 +846,67 @@ const ReviewOnboarding = ({form, beneficiaries, files, kycTypes, utilities, dire
                         <Tag color="blue" style={{ marginLeft: '8px' }}>{relationship}</Tag>
                       )}
                     </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+
+          {/* Step 6: Products */}
+          {products && products.length > 0 && (
+            <div style={{
+              marginBottom: '32px',
+              background: 'white',
+              padding: '24px',
+              borderRadius: '8px',
+              border: '2px solid #e8e8e8'
+            }}>
+              <h4 style={{
+                color: '#1890ff',
+                fontSize: '16px',
+                fontWeight: '600',
+                marginBottom: '16px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px'
+              }}>
+                <ShoppingOutlined /> Selected Products ({products.length})
+              </h4>
+
+              {products.map((product, index) => {
+                const data = productData[product.id] || {};
+
+                return (
+                  <div
+                    key={product.id}
+                    style={{
+                      marginBottom: index < products.length - 1 ? '16px' : '0',
+                      paddingBottom: index < products.length - 1 ? '16px' : '0',
+                      borderBottom: index < products.length - 1 ? '1px solid #f0f0f0' : 'none'
+                    }}
+                  >
+                    <Row gutter={[16, 12]} align="middle">
+                      <Col xs={24} md={10}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                          <CheckCircleOutlined style={{ color: '#52c41a', fontSize: '16px' }} />
+                          <span style={{ fontSize: '14px', fontWeight: '500', color: '#262626' }}>
+                            {data.Product_Name || `Product ${index + 1}`}
+                          </span>
+                        </div>
+                      </Col>
+                      <Col xs={12} md={6}>
+                        <div style={{ color: '#8c8c8c', fontSize: '12px' }}>Status</div>
+                        <Tag color={data.Status === 'Active' ? 'success' : data.Status === 'Pending' ? 'processing' : 'default'}>
+                          {data.Status || 'Pending'}
+                        </Tag>
+                      </Col>
+                      <Col xs={12} md={8}>
+                        <div style={{ color: '#8c8c8c', fontSize: '12px' }}>Start Date</div>
+                        <div style={{ fontSize: '14px', fontWeight: '500' }}>
+                          {data.Start_Date || <span style={{ color: '#bfbfbf' }}>Not set</span>}
+                        </div>
+                      </Col>
+                    </Row>
                   </div>
                 );
               })}
